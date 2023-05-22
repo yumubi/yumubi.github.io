@@ -1,0 +1,995 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-CN"
+            
+    >
+    <head>
+    <meta charset="utf-8">
+    
+    
+    <title>
+        SpringMVC控制器粗解 |
+        
+        Goji</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="别人的博文,copy过来备份  Spring MVC 提供了基于注解的编程模型，@Controller和@RestController组件内部可以使用注解来表示请求映射、请求输入、异常处理等功能。注解提供了方法级别的Controller实现，从而不必扩展基类或实现特定的接口，减少了代码量、优化了项目结构！ 一个常见的基于注解定义的控制器案例如下： 12345678910@Controllerpu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC控制器粗解">
+<meta property="og:url" content="https://yumubi.github.io/2023/05/22/2023-04-24-%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84Controller%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E5%85%A8%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Goji">
+<meta property="og:description" content="别人的博文,copy过来备份  Spring MVC 提供了基于注解的编程模型，@Controller和@RestController组件内部可以使用注解来表示请求映射、请求输入、异常处理等功能。注解提供了方法级别的Controller实现，从而不必扩展基类或实现特定的接口，减少了代码量、优化了项目结构！ 一个常见的基于注解定义的控制器案例如下： 12345678910@Controllerpu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1078e195a4fd4386809c795db96e60f8~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cecedcd0d0074a00994777a0d56709c3~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e50e53513359437cbb76939dd1de847c~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bc9f37e549e4501872878f3191f3096~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d28c3536806c405aa31e03b0eb55fa52~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/49abea19fa5c4ebbb4871df2376f3723~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b11bb6ad32b460db9828184336cb9af~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5713ed017809412fa61356cb5ac91345~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/143d80109d1744aa9eb687dc90022397~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+<meta property="article:published_time" content="2023-05-22T02:55:20.388Z">
+<meta property="article:modified_time" content="2023-05-07T08:36:38.107Z">
+<meta property="article:author" content="yumubi">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1078e195a4fd4386809c795db96e60f8~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
+    
+        <link rel="alternate" href="/atom.xml" title="Goji" type="application/atom+xml">
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    
+    
+        
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui/dist/fancybox.css">
+
+    
+    
+    
+<script src="https://unpkg.com/pace-js@1.2.4/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+  
+    <body>
+    <div id="container">
+        <div id="wrap">
+            <header id="header">
+    
+        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/banner.57axhcaoefc0.webp" data-sizes="auto" alt="SpringMVC控制器粗解" class="lazyload">
+    
+    <div id="header-outer" class="outer">
+        <div id="header-title" class="inner">
+            <h1 id="logo-wrap">
+                
+                    
+                    
+                        <a href="/" id="logo">SpringMVC控制器粗解</a>
+                    
+                
+            </h1>
+            
+                
+                
+            
+        </div>
+        <div id="header-inner">
+            <nav id="main-nav">
+                <a id="main-nav-toggle" class="nav-icon"></a>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/">首页</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/archives">归档</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/about">关于</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/friend">友链</a>
+                    </span>
+                
+            </nav>
+            <nav id="sub-nav">
+                
+                    <a id="nav-rss-link" class="nav-icon" href="/atom.xml"
+                       title="RSS 订阅"></a>
+                
+                
+            </nav>
+            <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yumubi.github.io"></form>
+            </div>
+        </div>
+    </div>
+</header>
+  
+            <div id="content" class="outer">
+                <section id="main"><article id="post-2023-04-24-基于注解的Controller控制器的配置全解" class="h-entry article article-type-post"
+         itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="article-inner">
+        <div class="article-meta">
+            <div class="article-date">
+    <a href="/2023/05/22/2023-04-24-%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84Controller%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E5%85%A8%E8%A7%A3/" class="article-date-link">
+        <time datetime="2023-05-22T02:55:20.388Z"
+              itemprop="datePublished">2023-05-22</time>
+    </a>
+</div>
+
+            
+    <div class="article-category">
+        <a class="article-category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+        </div>
+        <div class="hr-line"></div>
+        
+        <div class="e-content article-entry" itemprop="articleBody">
+            
+                <blockquote>
+<p><font color=#39crbb><strong>别人的博文,copy过来备份</strong></font></p>
+</blockquote>
+<p><strong>Spring MVC 提供了基于注解的编程模型，<code>@Controller和@RestController</code>组件内部可以使用注解来表示请求映射、请求输入、异常处理等功能。注解提供了方法级别的Controller实现，从而不必扩展基类或实现特定的接口，减少了代码量、优化了项目结构！</strong></p>
+<p>一个常见的基于注解定义的控制器案例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">handle</span><span class="params">(Model model)</span> &#123;</span><br><span class="line">        model.addAttribute(<span class="string">&quot;message&quot;</span>, <span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;index.jsp&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>该方法接受Model参数并以String的形式返回逻辑视图名称，但是还存在许多其他可配置的选项</p>
+<h2 id="1-控制器的声明"><a href="#1-控制器的声明" class="headerlink" title="1 控制器的声明"></a>1 控制器的声明</h2><p><strong>我们可以通过在 Servlet 的WebApplicationContext中使用标准Spring bean 的定义方式来定义Controller控制器bean。</strong></p>
+<p><strong>@Controller注解采用@Component作为元注解，支持@ComponentScan和<code>&lt;context:component-scan/&gt;</code>的组件扫描，同时@Controller注解还会指示标注的类被作为 Web 组件的角色，如果采用@Service、@Component等其他组件扫描注解，那么内部的方法级别的控制器不会生效！</strong></p>
+<p><strong>@RestController 是一个组合注解，它组合使用了 @Controller 和 @ResponseBody元注解，指示其类中的每种方法都继承了类级别的@ResponseBody注解，因此返回的数据将直接写入response响应正文中，而不会使用ViewSolvsolver和View进行视图模版解析和渲染。</strong></p>
+<p><strong>注意，如果需要写入response响应正文中是JSON数据并且能自动将返回的对象格式化为JSON，那么还需要JSON转换的依赖：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson</span><br><span class="line">-databind --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;2.9.8&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-1-AOP-代理"><a href="#1-1-AOP-代理" class="headerlink" title="1.1 AOP 代理"></a>1.1 AOP 代理</h2><p><strong>Controller控制器中支持AOP 代理，例如在类上添加@Transactional进行事务控制，但这需要Spring MVC的配置文件定义了事务的支持！</strong></p>
+<p><strong>由于Controller控制器中的方法一般都不是从接口中继承的，因此建议使用基于类的动态代理，但是如果Controller实现了除了容器回调接口（例如InitializingBean、DisposableBean、Closeable、AutoCloseable接口以及Aware接口包括其子接口）、标志性接口、内部接口的的其他合理接口，那么为了让控制机方法的AOP配置生效，可能需要显式配置基于类的代理，通常是配置<code>&lt;tx:annotation-driven proxy-target-class=&quot;true&quot;/&gt;</code>或者<code>@EnableTransactionManagement(proxyTargetClass = true)</code>。</strong></p>
+<h2 id="2-Request-Mapping请求映射配置"><a href="#2-Request-Mapping请求映射配置" class="headerlink" title="2 Request Mapping请求映射配置"></a>2 Request Mapping请求映射配置</h2><p><strong>我们可以使用注解@RequestMapping将请求映射到不同的控制器方法。它具有各种属性，可按 URL、HTTP 方法、请求参数、请求头和媒体类型匹配。可以在类级别使用它来表示共享映射，也可以在方法级别使用它来缩小到特定的终结点映射。</strong></p>
+<p><strong>更常见的还有用于筛选特定HTTP方法的@RequestMapping变体：@GetMapping、@PostMapping、@PutMapping、@DeleteMapping、@PatchMapping。</strong></p>
+<p>上面的这些基于特定HTTP方法的注解是一种组合注解，在RESTFUL风格的项目中，大多数的控制器方法都应该映射到特定的HTTP请求方法，因此更多的使用这些特性化的注解，而不是使用@RequestMapping，后者默认情况下<strong>与所有类型的HTTP方法匹配</strong>。但是，在类级别仍可以使用@RequestMapping来表示共享映射。</p>
+<p><strong>下面示例要求具体HTTP请求方法的方法级映射：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/persons&quot;)</span><br><span class="line">class PersonController &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 查询的方法，采用get请求</span><br><span class="line">     */</span><br><span class="line">    @GetMapping(&quot;/&#123;id&#125;&quot;)</span><br><span class="line">    public Person get(@PathVariable Long id) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 插入的方法，采用post请求</span><br><span class="line">     */</span><br><span class="line">    @PostMapping</span><br><span class="line">    public void add(@RequestBody Person person) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 更新的方法，采用put请求</span><br><span class="line">     */</span><br><span class="line">    @PutMapping</span><br><span class="line">    public void update(@RequestBody Person person) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 删除的方法，采用delete请求</span><br><span class="line">     */</span><br><span class="line">    @DeleteMapping(&quot;/&#123;id&#125;&quot;)</span><br><span class="line">    public void delete(@PathVariable Long id) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-1-URI-模式"><a href="#2-1-URI-模式" class="headerlink" title="2.1 URI 模式"></a>2.1 URI 模式</h2><p><strong>我们可以使用 global模式和通配符来映射请求，简单的说，请求的URL路径支持模式匹配！Spring MVC 使用 PathMatcher 协定和来自spring-core的 AntPathMatcher 实现进行 URI 路径匹配。</strong></p>
+<p><strong>下面是Pattern以及对应的匹配规则：</strong></p>
+<table><tbody><tr><td>Pattern</td><td>Description</td><td>Example</td></tr><tr><td>?</td><td>匹配一个字符</td><td>"/pages/t?st.html" 匹配 "/pages/test.html" 和"/pages/t3st.html"</td></tr><tr><td>*</td><td>匹配路径段中的零个或多个字符</td><td>"/resources/.png" 匹配 "/resources/file.png"。"/projects/*/versions" 匹配 "/projects/spring/versions" 不匹配 "/projects/spring/boot/versions"</td></tr><tr><td>**</td><td>匹配零个或多个路径段，直到路径结束</td><td>"/resources/**" 匹配 "/resources/file.png" 和 "/resources/images/file.png"</td></tr><tr><td>{name}</td><td>匹配路径段，并捕获它作为名为"name"的控制器方法的参数变量的值</td><td>"/projects/{project}/versions" 匹配" /projects/spring/versions" 和 captures project=spring</td></tr><tr><td>{name:[a-z]+}</td><td>匹配满足"[a-z]+"正则表达式的路径段，并捕获它作为名为"name"的控制器方法的参数变量的值</td><td>"/projects/{project:[a-z]+}/versions" 匹配"/projects/spring/versions" 不匹配 "/projects/spring1/versions"</td></tr></tbody></table>
+
+<h3 id="2-1-1-PathVariable"><a href="#2-1-1-PathVariable" class="headerlink" title="2.1.1 @PathVariable"></a>2.1.1 @PathVariable</h3><p>捕获的 URI 中的变量可以通过@PathVariable注解注入到方法参数中进行访问，默认情况下参数名和URI中的变量名一致，如下例所示，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/owners/&#123;ownerId&#125;/pets/&#123;petId&#125;&quot;)</span><br><span class="line">public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>实际上参数名和URI中的变量名不一致也可以，此时需要在@PathVariable注解中指明使用的变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/owners/&#123;ownerId&#125;&quot;)</span><br><span class="line">public void findPet(@PathVariable(&quot;ownerId&quot;) Long id) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>我们可以同时在类和方法级别中声明 URI 变量并使用，如下例所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(&quot;/owners/&#123;ownerId&#125;&quot;)</span><br><span class="line">public class OwnerController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/pets/&#123;petId&#125;&quot;)</span><br><span class="line">    public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>URI变量将自动转换为参数相应的类型，如果不能转换将引发TypeMismatchException异常。默认情况下支持简单类型（int、long、Date 等），您可以注册对任何其他数据类型的支持，可以通过 WebDataBinder（DataBinder）或通过FormattingConversionService注册格式器Formatters来自定义类型转换规则。</strong></p>
+<h3 id="2-1-2-正则表达式"><a href="#2-1-2-正则表达式" class="headerlink" title="2.1.2 正则表达式"></a>2.1.2 正则表达式</h3><p><strong>语法<code>[varName:regex]</code>声明带有正则表达式的URI变量，在一个路径段中,可以多次使用该语法。例如，以下方法可以提取URI路径段中的名称、版本和文件扩展名：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class RegexController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/&#123;name:[a-z-]+&#125;-&#123;version:\\d\\.\\d\\.\\d&#125;&#123;ext:\\.[a-z]+&#125;&quot;)</span><br><span class="line">    public void handle(@PathVariable String name, @PathVariable String version, @PathVariable String ext) &#123;</span><br><span class="line">        System.out.println(name);</span><br><span class="line">        System.out.println(version);</span><br><span class="line">        System.out.println(ext);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;spring-web-3.0.5.jar，将会得到： <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1078e195a4fd4386809c795db96e60f8~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<h3 id="2-1-3-占位符"><a href="#2-1-3-占位符" class="headerlink" title="2.1.3 占位符"></a>2.1.3 占位符</h3><p>URI路径模式还可以支持嵌入${…}占位符，这些占位符在启动时通过PropertyPlaceHolderConfigurer针对本地、系统system、环境environment和其他属性源中的属性来解析。因此我们可以使用它根据某些外部配置对基本 URL 进行参数化。</p>
+<p>URI配置文件UriPlaceholder.properties（需要加载到容器中）如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">uri1=tx</span><br><span class="line">uri2=xt</span><br><span class="line">uri3=xxx</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>Controller如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/$&#123;uri1&#125;&quot;)</span><br><span class="line">class PlaceholderController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/$&#123;uri2&#125;/&#123;$&#123;uri3&#125;&#125;/&#123;id&#125;&quot;)</span><br><span class="line">    public void handle(@PathVariable Long id, @PathVariable String xxx) &#123;</span><br><span class="line">        System.out.println(id);</span><br><span class="line">        System.out.println(xxx);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;tx&#x2F;xt&#x2F;aaa&#x2F;111，结果如下：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cecedcd0d0074a00994777a0d56709c3~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<h3 id="2-1-4-后缀匹配"><a href="#2-1-4-后缀匹配" class="headerlink" title="2.1.4 后缀匹配"></a>2.1.4 后缀匹配</h3><p>默认情况下，Spring MVC支持“.*”的后缀匹配，比如映射到 &#x2F;person 的控制器也隐式映射到&#x2F;person.*。这样的好处是，可以通过文件扩展名用于来表示请求的内容类型（content type）以用于响应（而不是使用Accept请求头） - 例如&#x2F;person.pdf，&#x2F;person.xml等。</p>
+<p>但是后来文件扩展名的使用已经以各种方式证明是有问题的。使用 URI 变量、路径参数和 URI 编码时，可能会导致歧义，还可能引起RFD攻击，目前AcceptHeader是首选的内容协商判定依据。</p>
+<p>如果要完全禁用文件扩展名匹配，必须设置以下两项：</p>
+<ol>
+<li><code>PathMatchConfigurer.setUseSuffixPatternMatch(false)。</code></li>
+<li><code>ContentNegotiationConfigurer.preferredPathExtension(false）。</code></li>
+</ol>
+<h2 id="2-2-匹配Content-Type"><a href="#2-2-匹配Content-Type" class="headerlink" title="2.2 匹配Content-Type"></a>2.2 匹配Content-Type</h2><p>我们可以根据请求的<code>Content-Type（客户端发送的实体数据类型）</code>缩小请求映射范围，如下案例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@PostMapping(path = &quot;/pets&quot;, consumes = &quot;application/json&quot;)</span><br><span class="line">public void addPet(@RequestBody Pet pet) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>consumes</code>属性是一个String数组，可以传递一个或多个media type媒体类型字符串，其中至少一个与请求的Content-Type匹配！</p>
+<p>此外，consumes支持<code>否定表达式</code>，例如!text&#x2F;plain表示除text&#x2F;plain之外的任何Content-Type。</p>
+<p>同理，我们可以在<code>类级别</code>声明共享的consumes属性。但是，与大多数其他请求映射属性不同，在类级别使用时，方法级使用该同名属性将会重写，而不是扩展类级声明，简单的说就是<strong>如果方法上也有consumes属性，那么就不会采用、合并类级别上的consumes属性。</strong></p>
+<p><strong>在设置consumes的媒体类型值的时候，可以使用MediaType类，该类为常用媒体类型（如<code>APPLICATION_JSON_VALUE</code>和<code>APPLICATION_XML_VALUE</code>）提供了可使用的字符串常量。</strong></p>
+<h2 id="2-3-匹配Accept"><a href="#2-3-匹配Accept" class="headerlink" title="2.3 匹配Accept"></a>2.3 匹配Accept</h2><p><strong>我们可以根据请求的<code>Accept（客户端希望接受的数据类型）</code>缩小请求映射范围，如下案例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(path = &quot;/pets/&#123;petId&#125;&quot;, produces = &quot;application/json&quot;)</span><br><span class="line">@ResponseBody</span><br><span class="line">public Pet getPet(@PathVariable String petId) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>produces</code>属性是一个String数组，可以传递一个或多个media type媒体类型字符串，其中至少一个与请求的Accept匹配！</p>
+<p>此外，produces支持<code>否定表达式</code>，例如!text&#x2F;plain表示除text&#x2F;plain之外的任何Accept。 同理，我们可以在<code>类级别</code>声明共享的produces属性。但是，与大多数其他请求映射属性不同，在类级别使用时，方法级使用该同名属性将会重写，而不是扩展类级声明，简单的说就是<strong>如果方法上也有produces属性，那么就不会采用、合并类级别上的produces属性。</strong></p>
+<p><strong>在设置produces的媒体类型值的时候，可以使用MediaType类，该类为常用媒体类型（如<code>APPLICATION_JSON_VALUE</code>和<code>APPLICATION_XML_VALUE</code>）提供了可使用的字符串常量。</strong></p>
+<h2 id="2-4-匹配参数"><a href="#2-4-匹配参数" class="headerlink" title="2.4 匹配参数"></a>2.4 匹配参数</h2><p><strong>我们可以根据请求参数条件缩小请求映射范围。可以测试存在请求参数（myParam）、缺少请求参数（!myParam）或特定值（myParam&#x3D;myValue）是否存在。</strong></p>
+<p>下面的示例演示如何测试特定参数值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(path = &quot;/pets/&#123;petId&#125;&quot;, params = &quot;myParam=myValue&quot;)</span><br><span class="line">public void findPet(@PathVariable String petId) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>上面的案例中，除了URL路径必须匹配之外，还必须存在myParam参数并且值等于myValue，请求才会映射到该控制器方法！</strong></p>
+<h2 id="2-5-匹配请求头"><a href="#2-5-匹配请求头" class="headerlink" title="2.5 匹配请求头"></a>2.5 匹配请求头</h2><p><strong>我们可以根据请求头缩小请求映射范围。可以测试存在请求头（myHeader）、缺少请求头（! myHeader）或特定值（myHeader&#x3D;myValue）是否存在。</strong></p>
+<p>下面的示例演示如何测试特定请求头值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(path = &quot;/pets&quot;, headers = &quot;myHeader=myValue&quot;)</span><br><span class="line">public void findPet(@PathVariable String petId) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>上面的案例中，除了URL路径必须匹配之外，还必须存在myHeader请求头并且值等于myValue，请求才会映射到该控制器方法！</strong></p>
+<p><strong>由于Content-Type和Accept都是请求头参数，因此它们也可以使用headers属性匹配，但是最好还是使用consumes和produces属性。</strong></p>
+<h2 id="2-6-HTTP-HEAD、OPTIONS方法"><a href="#2-6-HTTP-HEAD、OPTIONS方法" class="headerlink" title="2.6 HTTP HEAD、OPTIONS方法"></a>2.6 HTTP HEAD、OPTIONS方法</h2><p><strong>@GetMapping和@RequestMapping(method&#x3D;RequestMethod.GET)透明的支持HTTP HEAD 方法进行请求映射，控制器方法不需要更改。response中的Content-Length头将会设置为将要写入的字节数而无需实际写入响应。也就是说，HTTP HEAD 请求的处理就像是 HTTP GET 一样，只是，不写入响应正文，而是计算响应字节数并设置Content-Length标头。HEAD请求一般用来测试超链接的有效性，可用性和最近修改。</strong></p>
+<p><strong>对于HTTP OPTIONS请求，默认情况下将对应的控制器注解中的method属性（表示支持的HTTP 方法）的值设置为“Allow”响应头的值，其中RequestMethod.GET支持GET,HEAD,OPTIONS方法，其他的类型则支持本类型方法和OPTIONS方法，也可以通过response手动设置“Allow”头信息！</strong></p>
+<p><strong>对于没有HTTP方法声明的@RequestMapping，Allow头将被设置为GET，HEAD，POST，PUT，PATCH，DELETE，OPTIONS。但是，控制器方法应始终声明支持的HTTP方法（例如通过使用HTTP方法特定的变体：@GetMapping，@PostMapping等）。</strong></p>
+<h2 id="2-7-组合注解"><a href="#2-7-组合注解" class="headerlink" title="2.7 组合注解"></a>2.7 组合注解</h2><p><strong>Spring MVC支持使用组合注解进行请求映射。这些注解本身使用@RequestMapping作为元注解，并且旨在以更狭窄，更具体的用途重新声明请求映射规则！</strong></p>
+<p><strong>@GetMapping、@PostMapping、@PutMapping、@DeleteMapping、@DeleteMapping 和 @PatchMapping是组合注解的实例。提供这些特性化注解的原因是，在RESTful风格的开发规范中，大多数控制器方法应该映射到特定的 HTTP 方法，以表达特定的操作，而不是使用@RequestMapping，因为默认情况下它匹配所有 HTTP 方法。</strong></p>
+<p><strong>以@GetMapping为例，可以看到，其内部采用了@RequestMapping注解作为元注解，并且限制了请求方法为RequestMethod.GET，即仅支持GET,HEAD,OPTIONS请求。</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e50e53513359437cbb76939dd1de847c~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<h2 id="3-Handler-Methods处理器方法"><a href="#3-Handler-Methods处理器方法" class="headerlink" title="3 Handler Methods处理器方法"></a>3 Handler Methods处理器方法</h2><p><strong>基于@RequestMapping的处理器方法具有灵活的方法签名，可以从一系列受支持的控制器方法参数和返回值中选择所需要开发方式！</strong></p>
+<h2 id="3-1-方法参数"><a href="#3-1-方法参数" class="headerlink" title="3.1 方法参数"></a>3.1 方法参数</h2><p><strong>方法支持JDK 8 的 java.util.Optional作为方法参数，并可以结合具有required属性的注解（例如@RequestParam、@RequestHeader ），采用Optional包装的参数等效于required&#x3D;false。</strong></p>
+<p><strong>下表描述了受支持的控制器方法参数和注解，任何参数都不支持Reactive相关类型。</strong></p>
+<table>
+<thead>
+<tr>
+<th>控制器方法参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>WebRequest, NativeWebRequest</td>
+<td>用于对请求参数、请求（request）和会话（session）属性的通用访问，而无需直接使用 Servlet API。</td>
+</tr>
+<tr>
+<td>javax.servlet.ServletRequest, javax.servlet.ServletResponse</td>
+<td>请求和响应，可以指定特性的类型，比如HttpServletRequest、MultipartHttpServletRequest</td>
+</tr>
+<tr>
+<td>javax.servlet.http.HttpSession</td>
+<td>session，如果使用了该参数，那么永远不会为null。请注意，session访问不是线程安全的。如果允许多个请求同时访问session，请考虑将RequestMappingHandlerAdapter实例的synchronizeOnSession标志设置为 true。</td>
+</tr>
+<tr>
+<td>javax.servlet.http.PushBuilder</td>
+<td>Servlet 4.0 的PushBuilder用于实现服务器资源推送。如果客户端不支持 HTTP&#x2F;2 ，则注入的 PushBuilder 实例可能为 null。</td>
+</tr>
+<tr>
+<td>java.security.Principal</td>
+<td>当前经过身份验证的用户 – 如果已知，可能是特定的Principal实现类。</td>
+</tr>
+<tr>
+<td>HttpMethod</td>
+<td>当前请求的 HTTP 方法。</td>
+</tr>
+<tr>
+<td>java.util.Locale</td>
+<td>当前请求的区域设置，由可用的LocaleResolver区域解析器确定。</td>
+</tr>
+<tr>
+<td>java.util.TimeZone, java.time.ZoneId</td>
+<td>与当前请求关联的时区，由LocaleContextResolver确定。</td>
+</tr>
+<tr>
+<td>java.io.InputStream, java.io.Reader</td>
+<td>原始请求体，通过 Servlet API 获取的。</td>
+</tr>
+<tr>
+<td>java.io.OutputStream, java.io.Writer</td>
+<td>原始响应体，通过 Servlet API 获取的。</td>
+</tr>
+<tr>
+<td>@PathVariable</td>
+<td>用于访问 URI 模版变量，在前面的请求映射部分就讲过了。</td>
+</tr>
+<tr>
+<td>@MatrixVariable</td>
+<td>用于访问 URI 路径段中的name-value键值对。</td>
+</tr>
+<tr>
+<td>@RequestParam</td>
+<td>用于访问 Servlet 请求参数，支持多部分文件参数类型，参数值将自动转换为声明的方法参数类型。注意，对于简单类型的参数，可以不使用@RequestParam注解！</td>
+</tr>
+<tr>
+<td>@RequestHeader</td>
+<td>用于访问请求头中的信息。请求头的值将自动转换为声明的方法参数类型。</td>
+</tr>
+<tr>
+<td>@CookieValue</td>
+<td>用于访问 Cookie。Cookie值将转换为声明的方法参数类型。</td>
+</tr>
+<tr>
+<td>@RequestBody</td>
+<td>用于访问 HTTP 请求正文（请求体）。正文内容转换为声明的方法参数类型，通过使用HttpMessageConverter来实现转换，比较重要。</td>
+</tr>
+<tr>
+<td>HttpEntity</td>
+<td>用于访问请求头和正文。正文类型使用HttpMessageConverter转换。</td>
+</tr>
+<tr>
+<td>@RequestPart</td>
+<td>用于访问multipart&#x2F;form-data多部分请求中的一个部分，使用HttpMessageConverter转换类型。对于解析同时上传多中数据的请求的解析方便</td>
+</tr>
+<tr>
+<td>java.util.Map, org.springframework.ui.Model, org.springframework.ui.ModelMap</td>
+<td>用于访问、设置model参数，model中的数据将可能用于视图渲染。</td>
+</tr>
+<tr>
+<td>RedirectAttributes</td>
+<td>指定用于重定向时的属性。一个专门用于重定向之后还能带参数跳转的的工具类。</td>
+</tr>
+<tr>
+<td>@ModelAttribute</td>
+<td>用于访问模型中的现有属性（如果不存在，则进行实例化），并应用数据绑定和验证。</td>
+</tr>
+<tr>
+<td>Errors, BindingResult</td>
+<td>用于访问来自命令对象（即@ ModelAttribute参数）的数据验证和数据绑定中的错误或来自@RequestBody或@RequestPart参数的验证中的错误。必须在经过验证的方法参数后声明一个Errors或BindingResult参数。</td>
+</tr>
+<tr>
+<td>SessionStatus + class-level @SessionAttributes</td>
+<td>SessionStatus#setComplete方法可以触发通过类级注解@SessionAttributes存储的session属性的清理，但是不会清理真正session中的属性。</td>
+</tr>
+<tr>
+<td>UriComponentsBuilder</td>
+<td>用于构建相对于当前请求的host，port，scheme，context path以及servletmapping的URL。</td>
+</tr>
+<tr>
+<td>@SessionAttribute</td>
+<td>用于访问已经存储的session域中的会话属性。</td>
+</tr>
+<tr>
+<td>@RequestAttribute</td>
+<td>用于访问已创建的、预先存在的request域中的属性</td>
+</tr>
+<tr>
+<td>任何其他参数</td>
+<td>如果方法参数不与此表中任何上面的类型匹配，并且它是一种简单类型（由 BeanUtils#isSimpleProperty确定），则它是作为一个@RequestParam，并且requir&#x3D;false。否则，它将作为一个@ModelAttribute。</td>
+</tr>
+</tbody></table>
+<h2 id="3-2-返回值"><a href="#3-2-返回值" class="headerlink" title="3.2 返回值"></a>3.2 返回值</h2><p><strong>下表描述了受支持的控制器方法返回值以及注解，所有返回值都支持Reactive类型。</strong></p>
+<table>
+<thead>
+<tr>
+<th>控制器方法返回值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@ResponseBody</td>
+<td>返回值将通过 HttpMessageConverter进行转换，并写入响应。</td>
+</tr>
+<tr>
+<td>HttpEntity**, ResponseEntity**</td>
+<td>返回值用于指定完整的响应（包括HTTP状态码、头部信息以及响应体），响应体将通过HttpMessageConverter实例转换并写入响应。</td>
+</tr>
+<tr>
+<td>HttpHeaders</td>
+<td>用于返回具有相应头且无响应正文的响应。</td>
+</tr>
+<tr>
+<td>String</td>
+<td>一个视图名称，将通过ViewResolver来解析，并与模型数据一起使用（可以与@ModelAttribute方法结合，或者通过设置Model参数来配置模型数据）。</td>
+</tr>
+<tr>
+<td>View</td>
+<td>一个视图实例，与模型数据一起使用（可以与@ModelAttribute方法结合，或者通过设置Model参数来配置模型数据）。</td>
+</tr>
+<tr>
+<td>java.util.Map, org.springframework.ui.Model</td>
+<td>配置要添加到模型中的数据，视图名称则通过请求RequestToViewNameTranslator隐式的确定。</td>
+</tr>
+<tr>
+<td>@ModelAttribute</td>
+<td>配置要添加到模型中的数据，视图名称则通过请求RequestToViewNameTranslator隐式的确定。</td>
+</tr>
+<tr>
+<td>ModelAndView</td>
+<td>要使用的视图和模型属性，以及（可选）响应状态。</td>
+</tr>
+<tr>
+<td>void</td>
+<td>如果具有void返回类型(或null返回值)的方法也具有ServletResponse、OutputStream参数或@ResponseStatus注解，则认为该方法已经完全处理了响应。如果没有上面的条件，那么指示没有响应正文，或者选择默认的视图名！</td>
+</tr>
+<tr>
+<td>DeferredResult</td>
+<td>用于从异步线程返回任何上述类型的返回值，用于支持异步请求。</td>
+</tr>
+<tr>
+<td>Callable</td>
+<td>在Spring MVC 管理的线程中异步生成上述任何返回值，用于支持异步请求。</td>
+</tr>
+<tr>
+<td>ListenableFuture, java.util.concurrent.CompletionStage, java.util.concurrent.CompletableFuture</td>
+<td>DeferredResult的便捷替代方案。</td>
+</tr>
+<tr>
+<td>ResponseBodyEmitter, SseEmitter</td>
+<td>使用HttpMessageConverter实现异步发出对象流写入到响应中，也可以作为ResponseEntity的响应体。用于实现SSE–server send event，是一种服务端推送的技术。</td>
+</tr>
+<tr>
+<td>StreamingResponseBody</td>
+<td>以异步方式写入响应输出流，也可以作为ResponseEntity的响应体。</td>
+</tr>
+<tr>
+<td>Reactive 类型 – Reactor、RxJava 或其他ReactiveAdapterRegistry</td>
+<td>DeferredResult的替代方法，其中包含收集到List的多值流（例如Flux，Observable）。</td>
+</tr>
+<tr>
+<td>任何其他返回值</td>
+<td>如果返回值与上述任何条件不匹配，并且不是简单类型（由 BeanUtils#isSimpleProperty 确定），并且返回值是字符串或 void，它们都被视为视图名称（通过RequestToViewNameTranslator进行默认视图名称选择）。简单类型的值仍无法解析。</td>
+</tr>
+</tbody></table>
+<h2 id="3-3-Matrix-Variables"><a href="#3-3-Matrix-Variables" class="headerlink" title="3.3 Matrix Variables"></a>3.3 Matrix Variables</h2><p><strong>根据URI规范RFC 3986，请求URL的路径段中支持键值对。 Spring MVC根据Tim Berners-Lee的一篇<a href="https://link.juejin.cn/?target=https://www.w3.org/DesignIssues/MatrixURIs.html" title="https://www.w3.org/DesignIssues/MatrixURIs.html">旧文章</a>将这些键值对称为“矩阵变量（matrix variables）”，但是它们也可以被称为URI路径参数。</strong></p>
+<p><strong>矩阵变量可以出现在任何路径段中，每个变量用分号分隔，多个值用逗号分隔（例如，&#x2F;cars;color&#x3D;red,green;year&#x3D;2012）。也可以通过重复的变量名称指定多个值（例如，color&#x3D;red;color&#x3D;green;color&#x3D;blue）。</strong></p>
+<p><strong>如果 URL 预期包含矩阵变量，则控制器方法的请求映射必须使用 URI 变量来屏蔽该矩阵变量内容，并确保请求可以独立于矩阵变量的顺序和存在成功匹配。</strong></p>
+<p><strong>我们首先需要启用矩阵变量的使用。在JavaConfig配置中，您需要设置一个 UrlPathHelper bean，并设置removeSemicolonContent&#x3D;false。在 MVC的XML 命名空间中，可以设置<code>&lt;mvc:annotation-driven enable-matrix-variables=&quot;true&quot;/&gt;</code>。</strong></p>
+<p>下面示例如何简单的使用矩阵变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/matrix/&#123;id&#125;&quot;)</span><br><span class="line">public void handle(@PathVariable String id, @MatrixVariable int q, @MatrixVariable int r) &#123;</span><br><span class="line">    System.out.println(id);</span><br><span class="line">    System.out.println(q);</span><br><span class="line">    System.out.println(r);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;matrix&#x2F;11;q&#x3D;22;r&#x3D;33，得到如下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">11</span><br><span class="line">22</span><br><span class="line">33</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>鉴于所有路径段可能都包含矩阵变量，并且不同的路径段中可能具有同名的矩阵变量，有时可能需要消除矩阵变量预期到底位于哪个路径变量中的歧义。</strong></p>
+<p><strong>我们可以通过<code>@MatrixVariable 的name和pathvar属性</code>来区分，name表示矩阵变量名，pathVar表示当前矩阵变量所在的URI路径变量名！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/matrix/&#123;path1&#125;/&#123;path2&#125;&quot;)</span><br><span class="line">public void handle(@PathVariable int path1, @PathVariable int path2,</span><br><span class="line">                    @MatrixVariable(name = &quot;q&quot;, pathVar = &quot;path1&quot;) int q1,</span><br><span class="line">                    @MatrixVariable(name = &quot;q&quot;, pathVar = &quot;path2&quot;) int q2) &#123;</span><br><span class="line">    System.out.println(path1);</span><br><span class="line">    System.out.println(path2);</span><br><span class="line">    System.out.println(q1);</span><br><span class="line">    System.out.println(q2);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;matrix&#x2F;11;q&#x3D;22&#x2F;33;q&#x3D;44，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">11</span><br><span class="line">33</span><br><span class="line">22</span><br><span class="line">44</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>矩阵变量如果不存在，默认将会抛出异常，当然可以通过<code>required</code>属性定义为可选变量以及通过defaultValue指定默认值，如下例所示：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/matrix/req/&#123;id&#125;&quot;)</span><br><span class="line">public void handle(@MatrixVariable(required = false, defaultValue = &quot;110&quot;) int q) &#123;</span><br><span class="line">    System.out.println(q);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;matrix&#x2F;req&#x2F;11，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">110</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>若要获取所有矩阵变量，可以使用<code>MultiValueMap</code>，如下例所示：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/matrix/all/&#123;all1&#125;/&#123;all2&#125;&quot;)</span><br><span class="line">public void handle(@MatrixVariable MultiValueMap&lt;String, String&gt; allmatrixVars,</span><br><span class="line">                   @MatrixVariable(pathVar = &quot;all1&quot;) MultiValueMap&lt;String, String&gt; all1MatrixVars,</span><br><span class="line">                   @MatrixVariable(pathVar = &quot;all2&quot;) MultiValueMap&lt;String, String&gt; all2MatrixVars</span><br><span class="line">) &#123;</span><br><span class="line">    System.out.println(allmatrixVars);</span><br><span class="line">    System.out.println(all1MatrixVars);</span><br><span class="line">    System.out.println(all2MatrixVars);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;matrix&#x2F;all&#x2F;11;q&#x3D;22;r&#x3D;33&#x2F;44;q&#x3D;55;s&#x3D;66，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;q=[22, 55], r=[33], s=[66]&#125;</span><br><span class="line">&#123;q=[22], r=[33]&#125;</span><br><span class="line">&#123;q=[55], s=[66]&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-4-RequestParam"><a href="#3-4-RequestParam" class="headerlink" title="3.4 @RequestParam"></a>3.4 @RequestParam</h2><p><strong>我们可以使用@RequestParam注解将 Servlet 请求参数（即查询参数或表单数据）绑定到控制器方法参数上。如果目标方法参数类型不是String，则自动应用类型转换。</strong></p>
+<p><strong>@RequestParam 注解的name或者value属性表示绑定的请求参数名称，如果不设置，那么默认查找和变量名同名的请求参数，如下所示：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class RequestParamController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/requestParam1&quot;)</span><br><span class="line">    public void handle(@RequestParam String str) &#123;</span><br><span class="line">        System.out.println(str);</span><br><span class="line">        //…………</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestParam1?str&#x3D;test，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>默认情况下，使用此注解标注的方法参数是必需的，如果没有对应的变量，将抛出异常，但可以通过将@RequestParam 注解的<code>required</code>标志设置为 false 或使用Java8的<code>java.util.Optional</code>包装原始参数类型来指定方法参数是可选的。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/requestParam2&quot;)</span><br><span class="line">public void handle2(@RequestParam Optional&lt;String&gt; str) &#123;</span><br><span class="line">    //是否存在该参数</span><br><span class="line">    System.out.println(str.isPresent());</span><br><span class="line">    //如果存在该参数，那么输出</span><br><span class="line">    str.ifPresent(System.out::println);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestParam2，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>required&#x3D;false时，如果没有对应的请求参数，控制器方法对应的参数会被赋值为null，<code>如果参数是基本类型，此时会抛出异常，因为基本类型不能赋值为null</code>。可以使用基本类型的包装类，或者<code>java.util.Optional</code>，或者通过<code>defaultValue</code>属性设置默认值！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/requestParam3&quot;)</span><br><span class="line">public void handle3(@RequestParam(required = false,defaultValue = &quot;123&quot;) long i) &#123;</span><br><span class="line">    System.out.println(i);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestParam3，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">123</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>如果将参数类型声明为数组或列表则表示允许解析同一参数名称的多个参数值。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/requestParam4&quot;)</span><br><span class="line">public void handle4(@RequestParam long[] longs) &#123;</span><br><span class="line">    System.out.println(Arrays.toString(longs));</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestParam4?longs&#x3D;11&amp;longs&#x3D;22，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[11, 22]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>当 @RequestParam 注解标注在一个<code>Map&lt;String, String&gt;</code>或<code>MultiValueMap&lt;String, String&gt;</code>上，并且没在注解中指定的参数名称时，那么每个给定参数名称和对应的参数值都将被填充到该Map中。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/requestParam5&quot;)</span><br><span class="line">public void handle5(@RequestParam MultiValueMap&lt;String, String&gt; map) &#123;</span><br><span class="line">    System.out.println(map);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestParam5?a&#x3D;11&amp;a&#x3D;22&amp;b&#x3D;33，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;a=[11, 22], b=[33]&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> <font color=red><strong>@RequestParam是可选的。默认情况下，任何简单值类型的参数（由 <code>BeanUtils#isSimpleProperty</code> 确定），并且不由任何其他参数解析器解析，将被视为使用了@RequestParam 注解。</strong></font></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/requestParam6&quot;)</span><br><span class="line">public void handle5(int a, String b) &#123;</span><br><span class="line">    System.out.println(a);</span><br><span class="line">    System.out.println(b);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestParam6?a&#x3D;11&amp;b&#x3D;bb，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">11</span><br><span class="line">bb</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-5-RequestHeader"><a href="#3-5-RequestHeader" class="headerlink" title="3.5 @RequestHeader"></a>3.5 @RequestHeader</h2><p><strong>可以使用@RequestHeader注解将请求头的数据绑定到控制器中的方法参数中。如果目标方法参数类型不是String，则自动应用类型转换。</strong></p>
+<p><strong>name和value属性用于指定请求头参数名，如果不指定，那么将方法参数名作为请求头参数名。required用于指示该请求头是否是必须的，默认为true，required&#x3D;false时，defaultValue用于在不存在该请求头时指定默认值。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class RequestHeaderController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/header&quot;)</span><br><span class="line">    public void handle(@RequestHeader(name = &quot;Accept-Encoding&quot;, required = false) String acceptEncoding,</span><br><span class="line">                       @RequestHeader(name = &quot;Keep-Alive&quot;, required = false) String keepAlive) &#123;</span><br><span class="line">        System.out.println(acceptEncoding);</span><br><span class="line">        System.out.println(keepAlive);</span><br><span class="line">        //…………</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>当 @RequestParam 注解标注在一个<code>Map&lt;String, String&gt;</code>或<code>MultiValueMap&lt;String, String&gt;</code>或<code>HttpHeaders</code>类型的参数上时，那么每个请求头的数据都将被填充到该Map中。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/header/all&quot;)</span><br><span class="line">public void handle2(@RequestHeader Map&lt;String, String&gt; map,</span><br><span class="line">                    @RequestHeader MultiValueMap&lt;String, String&gt; multiValueMap,</span><br><span class="line">                    @RequestHeader HttpHeaders httpHeaders) &#123;</span><br><span class="line">    System.out.println(map);</span><br><span class="line">    System.out.println(multiValueMap);</span><br><span class="line">    System.out.println(httpHeaders);</span><br><span class="line">    //…………</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>Spring MVC内置支持可用于将逗号分隔的字符串转换为数组或字符串集合或类型转换系统已知的其他类型，这样就避免了手动转换操作。例如，用@RequestHeader(“Accept”)注解的方法参数可以是String类型，也可以是<code>String[]</code>或<code>List&lt;String&gt;</code>类型。</strong></p>
+<h2 id="3-6-CookieValue"><a href="#3-6-CookieValue" class="headerlink" title="3.6 @CookieValue"></a>3.6 @CookieValue</h2><p><strong>可以使用<code>@CookieValue</code>注解将 <code>HTTP Cookie</code> 的值绑定到控制器中的方法参数中。如果目标方法参数类型不是String，则自动应用类型转换。</strong></p>
+<p><strong><code>name</code>和<code>value</code>属性用于指定<code>cookie名</code>，如果不指定，那么将<code>方法参数名</code>作为cookie名。<code>required</code>用于指示该cookie是否是必须的，默认为true，required&#x3D;false时，<code>defaultValue</code>用于在不存在该cookie时指定默认值。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class CookieValueController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/setCookie&quot;)</span><br><span class="line">    public void handle(HttpServletResponse resp) throws IOException &#123;</span><br><span class="line">        //生成一个随机字符串</span><br><span class="line">        String uuid = UUID.randomUUID().toString();</span><br><span class="line">        System.out.println(&quot;setCookie: &quot; + uuid);</span><br><span class="line">        //创建Cookie对象，指定名字和值。Cookie类只有这一个构造器</span><br><span class="line">        Cookie cookie = new Cookie(&quot;uuid&quot;, uuid);</span><br><span class="line">        //在响应中添加Cookie对象</span><br><span class="line">        resp.addCookie(cookie);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/cookieValue&quot;)</span><br><span class="line">    public void handle1(@CookieValue String uuid) &#123;</span><br><span class="line">        System.out.println(&quot;cookieValue: &quot; + uuid);</span><br><span class="line">        //…………</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>首先访问&#x2F;setCookie，设置一个uuid的cookie，然后访问&#x2F;cookieValue尝试获取，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">setCookie: 1ad719b2-fdfd-489b-8f29-ee1e85eb2696</span><br><span class="line">cookieValue: 1ad719b2-fdfd-489b-8f29-ee1e85eb2696</span><br><span class="line">setCookie: 24646fa8-e033-411f-8f6c-b379830666c0</span><br><span class="line">cookieValue: 24646fa8-e033-411f-8f6c-b379830666c0</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-7-ModelAttribute"><a href="#3-7-ModelAttribute" class="headerlink" title="3.7 @ModelAttribute"></a>3.7 @ModelAttribute</h2><h3 id="3-7-1-用在方法参数上"><a href="#3-7-1-用在方法参数上" class="headerlink" title="3.7.1 用在方法参数上"></a>3.7.1 用在方法参数上</h3><p><strong>可以在方法参数上使用@ModelAttribute注解来注入参数属性，如果没找到该属性，则将其实例化，同时，还会使用属性名称与HTTP Servlet请求参数中的同名字段名称的值来进行填充属性，这称为数据绑定！默认的name属性根据参数类型推断而不是参数名。</strong></p>
+<p><strong>默认情况下，任何不是简单值类型的参数（由 BeanUtils#isSimpleProperty 确定），并且不由任何其他参数解析器解析，都将被视为使用了@ModelAttribute 注解。</strong></p>
+<p><strong>@ModelAttribute的工作大概分为两步：</strong></p>
+<ol>
+<li><strong>第一个步是获取参数属性实例，获取规则为：</strong><ol>
+<li>从model存储的数据中查找；</li>
+<li>从@SessionAttributes存储的数据中查找；</li>
+<li>通过Converter依次从URI路径变量、URL参数、Form表单中查找并尝试转换为对应参数类型（查找的参数名基于参数类型设置，通常是类名的小写），找到就返回；无法强制转化为Date参数。</li>
+<li>调用默认构造器器创建对象。<ol>
+<li>如果有多个构造器且没有空构造器，将抛出异常，建议只提供一个构造函数！</li>
+<li>如果是基本类型，将抛出异常！</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>在找到实例之后，第二步是通过WebDataBinder进行属性绑定和校验：</strong><ol>
+<li>依次从URI路径变量、Form表单、URL参数中查找，如果找到同名属性的变量，那么该属性将赋值为找到的值（通过setter方法，并且设置到Converter的类型转换），否则，将使用空属性。URI路径变量、Form表单、URL参数中如果存在同名参数，则后面值的覆盖前面的值！</li>
+<li>可以通过对参数添加 javax.validation.valid 注解或 Spring 的@Validated注解，在数据绑定后自动应用验证。</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-7-1-1-Converter转换器"><a href="#3-7-1-1-Converter转换器" class="headerlink" title="3.7.1.1 Converter转换器"></a>3.7.1.1 Converter转换器</h4><p><strong>依靠参数转换器Converter&lt;String,T&gt;可以从URI路径变量、URL参数、Form表单中获取同名参数并转换为参数对象，当然Converter还支持属性绑定时的类型转换！</strong></p>
+<p><strong>查找顺序为URI路径变量、URL参数、Form表单参数，找到之后立即返回，不再向后查找！</strong></p>
+<p><strong>如下案例，我们定义一个StringToMyModelConverter，它实现了org.springframework.core.convert.converter.Converter接口，并且实现了convert方法，该方法就是类型转换的方法，可以约定前端传递的数据的格式，然后后端按照格式解析！这里，我们约定传递的格式为JSON数据。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 把字符串转换MyModel</span><br><span class="line"> */</span><br><span class="line">@Component</span><br><span class="line">public class StringToMyModelConverter implements Converter&lt;String, MyModel&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * String source    传入进来字符串</span><br><span class="line">     *</span><br><span class="line">     * @param source 传入的要被转换的字符串</span><br><span class="line">     * @return 转换后的格式类型</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public MyModel convert(String source) &#123;</span><br><span class="line">        ObjectMapper mapper = new ObjectMapper();</span><br><span class="line">        MyModel myModel = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            myModel = mapper.readValue(source, MyModel.class);</span><br><span class="line">            System.out.println(&quot;-----------------&quot;);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println(&quot;转换异常！&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return myModel;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在Spring MVC配置文件中配置类型转换器，将自定义的转换器注册到类型转换服务中去：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--conversion-service指定在字段绑定期间用于类型转换的转换服务的 bean 名称。 --&gt;</span><br><span class="line">&lt;!--如果不指定，则表示注册默认常见类型转换器DefaultFormattingConversionService--&gt;</span><br><span class="line">&lt;mvc:annotation-driven enable-matrix-variables=&quot;true&quot; conversion-service=&quot;conversionService&quot;/&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--配置类型转换服务工厂，它除了可以注入自定义类型转换器之外，还会默认创建DefaultConversionService--&gt;</span><br><span class="line">&lt;bean id=&quot;conversionService&quot; class=&quot;org.springframework.context.support.ConversionServiceFactoryBean&quot;&gt;</span><br><span class="line">    &lt;property name=&quot;converters&quot;&gt;</span><br><span class="line">        &lt;set&gt;</span><br><span class="line">            &lt;!--注入自定义转换器实例--&gt;</span><br><span class="line">            &lt;ref bean=&quot;stringToMyModelConverter&quot;/&gt;</span><br><span class="line">        &lt;/set&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>控制器方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/modelAttribute/&#123;myModel&#125;&quot;)</span><br><span class="line">public void handle2(@ModelAttribute MyModel myModel) &#123;</span><br><span class="line">    System.out.println(myModel);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;modelAttribute&#x2F;{“modelId”:”9999”,”modelType”:”999”,”modelName”:”666”}，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-----------------</span><br><span class="line">MyModel&#123;modelId=9999, modelType=999, modelName=&#x27;666&#x27;&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-7-1-2-数据绑定"><a href="#3-7-1-2-数据绑定" class="headerlink" title="3.7.1.2 数据绑定"></a>3.7.1.2 数据绑定</h4><p><strong>找到或者创建属性实例之后，会进行数据绑定，依次从URI路径变量、Form表单、URL参数中查找数据，如果找到同名变量，那么将赋值为找到的值，否则，将使用空属性。在有必要的情况下，同样对属性应用Converter转换。</strong></p>
+<p><strong>URI路径变量、Form表单、URL参数中如果存在同名参数，则后面的覆盖前面的！</strong></p>
+<p><strong>可以通过将@ModelAttribute的binding属性设置为false来禁止数据绑定!</strong></p>
+<p>一个简单的案例如下，一个MyModel类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author lx</span><br><span class="line"> */</span><br><span class="line">public class MyModel &#123;</span><br><span class="line">    private Long modelId;</span><br><span class="line">    private Integer modelType;</span><br><span class="line"></span><br><span class="line">    private String modelName;</span><br><span class="line"></span><br><span class="line">    public void setModelId(Long modelId) &#123;</span><br><span class="line">        this.modelId = modelId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setModelType(Integer modelType) &#123;</span><br><span class="line">        this.modelType = modelType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setModelName(String modelName) &#123;</span><br><span class="line">        this.modelName = modelName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;MyModel&#123;&quot; +</span><br><span class="line">                &quot;modelId=&quot; + modelId +</span><br><span class="line">                &quot;, modelType=&quot; + modelType +</span><br><span class="line">                &quot;, modelName=&#x27;&quot; + modelName + &#x27;\&#x27;&#x27; +</span><br><span class="line">                &#x27;&#125;&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>一个Controller：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class ModelAttributeController &#123;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/modelAttribute/&#123;modelId&#125;/&#123;modelType&#125;&quot;)</span><br><span class="line">    public void handle(@ModelAttribute MyModel myModel) &#123;</span><br><span class="line">        System.out.println(myModel);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>发送一个post请求，访问&#x2F;modelAttribute&#x2F;123&#x2F;321，表单参数为“modelName:myModel”，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyModel&#123;modelId=123, modelType=321, modelName=&#x27;myModel&#x27;&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>数据绑定可能会导致错误。默认情况下将抛出BindException给客户端。若要在控制器方法中检查此类错误并做出处理，可以在@ModelAttribute参数旁边的后一个参数添加BindingResult参数，该参数可以校验绑定是否成功！</strong></p>
+<p><strong>在数据绑定之后，还可以通过添加@javax.validation.valid注解或者Spring的@Validated注解以及各种校验注解对数据进行非常方便的校验，这部分后面单独讲解！</strong></p>
+<h3 id="3-7-2-用在方法上"><a href="#3-7-2-用在方法上" class="headerlink" title="3.7.2 用在方法上"></a>3.7.2 用在方法上</h3><p><strong>被@ModelAttribute注解标注的方法会在控制器方法执行之前先执行，同时，@ModelAttribute方法可以和控制器方法一样的绑定、获取各种参数！通常用于辅助初始化model参数，实际项目中用的并不多。</strong></p>
+<p><strong>如果用在@Controller类中，那么作用域就是当前Controller的控制器方法，如果用在@ControllerAdvice类中，那么作用域就是所有Controller的控制器方法。</strong></p>
+<p><strong>修饰没有返回值的方法</strong>，此时可以在参数上声明一个Map、Model、ModelMap类型的参数，可以将数据存入model中，model中的数据使用范围是当前request。</p>
+<p><strong>修饰有返回值的方法</strong>。返回值会放到model中。此model属性的名称没有指定，它由返回值类型经过计算来定义，如方法返回User类型，那么属性值是User对象，属性的名称是user，即简单类名（实际上最后会通过Introspector#decapitalize方法得到），也可以通过@ModelAttribute(value&#x3D;”myModelName”)指定名称。</p>
+<p><strong>如果将@ModelAttribute和@RequestMapping标注在同一个方法上，那么方法返回值将被作为model属性！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@ModelAttribute</span><br><span class="line">public MyModel model() &#123;</span><br><span class="line">    System.out.println(&quot;---ModelAttribute方法执行---&quot;);</span><br><span class="line">    MyModel myModel = new MyModel();</span><br><span class="line">    myModel.setModelId(123L);</span><br><span class="line">    myModel.setModelType(321);</span><br><span class="line">    myModel.setModelName(&quot;ModelAttribute&quot;);</span><br><span class="line">    System.out.println(myModel.hashCode());</span><br><span class="line">    return myModel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;/modelAttribute&quot;)</span><br><span class="line">public void handle5(MyModel myModel) &#123;</span><br><span class="line">    System.out.println(&quot;---处理器方法支持---&quot;);</span><br><span class="line">    System.out.println(myModel);</span><br><span class="line">    System.out.println(myModel.hashCode());</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-8-SessionAttributes和-SessionAttribute"><a href="#3-8-SessionAttributes和-SessionAttribute" class="headerlink" title="3.8 @SessionAttributes和@SessionAttribute"></a>3.8 @SessionAttributes和@SessionAttribute</h2><p><strong>@SessionAttributes是一个类级别的注释，标注在某个控制器类上之后，该控制器中存入model的属性将存入session中，并且其他的控制器方法将可以共享的使用的session中的model属性。</strong></p>
+<p><strong>即，如果属性只存入model中，那么当前request的调用链之间的方法可以共享数据，加了@SessionAttributes之后，存入model中的数据实际上会属性存入session中，不同request请求之间可以共享数据。</strong></p>
+<p><strong>@SessionAttributes的name或者value属性是一个String数组，用于指定要存入session的model数据的名称，也可以设置types属性，它是一个Class数组，用于指定要存入session的model数据的类型。</strong></p>
+<p><strong>如果想要清除当前类中通过@SessionAttributes存储到session中的数据，可以将通过org.springframework.web.bind.support.SessionStatus作为参数注入控制器方法，并调用setComplete方法，该方法不会清理真正的session中的数据！</strong></p>
+<p><strong>在方法参数上使用 @SessionAttribute 注解可以访问预先存在的session域中的会话属性，无论是通过传统Session对象设置的还是通过@SessionAttributes设置的！</strong></p>
+<p><strong>如果需要添加或删除指定的session属性，可以将 org.springframe. web.context.request.WebRequest或 javax.servlet.httpSession作为参数注入控制器方法。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@SessionAttributes(&#123;&quot;myModel&quot;, &quot;model&quot;&#125;)</span><br><span class="line">public class SessionAttributesController &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 通过@ModelAttribute存入的数据</span><br><span class="line">     */</span><br><span class="line">    @ModelAttribute</span><br><span class="line">    public MyModel model() &#123;</span><br><span class="line">        MyModel myModel = new MyModel();</span><br><span class="line">        myModel.setModelId(111L);</span><br><span class="line">        myModel.setModelType(111);</span><br><span class="line">        myModel.setModelName(&quot;ModelAttribute1&quot;);</span><br><span class="line">        return myModel;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/setsessionAttributes&quot;)</span><br><span class="line">    public void handle1(Model model, HttpServletRequest request) &#123;</span><br><span class="line">        //手动存入的model数据</span><br><span class="line">        MyModel myModel = new MyModel();</span><br><span class="line">        myModel.setModelId(222L);</span><br><span class="line">        myModel.setModelType(222);</span><br><span class="line">        myModel.setModelName(&quot;ModelAttribute2&quot;);</span><br><span class="line">        model.addAttribute(&quot;model&quot;, myModel);</span><br><span class="line"></span><br><span class="line">        //手动存入session的数据</span><br><span class="line">        HttpSession session = request.getSession();</span><br><span class="line">        UUID uuid = UUID.randomUUID();</span><br><span class="line">        System.out.println(uuid);</span><br><span class="line">        session.setAttribute(&quot;id&quot;, uuid);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 清理session</span><br><span class="line">     */</span><br><span class="line">    @GetMapping(&quot;/cleansessionAttributes&quot;)</span><br><span class="line">    public void handle2(SessionStatus sessionStatus) &#123;</span><br><span class="line">        sessionStatus.setComplete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class SessionAttributesController2 &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param myModel 尝试获取通过@ModelAttribute存入的数据</span><br><span class="line">     * @param model   尝试获取手动存入的model数据</span><br><span class="line">     * @param id      尝试获取手动存入session的数据</span><br><span class="line">     */</span><br><span class="line">    @GetMapping(&quot;/getsessionAttributes&quot;)</span><br><span class="line">    public void handle1(@SessionAttribute(name = &quot;myModel&quot;,required = false) MyModel myModel,</span><br><span class="line">                        @SessionAttribute(name = &quot;model&quot;,required = false) MyModel model,</span><br><span class="line">                        @SessionAttribute String id) &#123;</span><br><span class="line">        System.out.println(myModel);</span><br><span class="line">        System.out.println(model);</span><br><span class="line">        System.out.println(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>首先访问&#x2F;sessionAttributes1，随后访问&#x2F;sessionAttributes2，将可以获取session中的model数据！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d8783090-da1e-495f-ac48-32a554009e20</span><br><span class="line">MyModel&#123;modelId=111, modelType=111, modelName=&#x27;ModelAttribute1&#x27;&#125;</span><br><span class="line">MyModel&#123;modelId=222, modelType=222, modelName=&#x27;ModelAttribute2&#x27;&#125;</span><br><span class="line">d8783090-da1e-495f-ac48-32a554009e20</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>然后访问&#x2F;cleansessionAttributes清除session，再次访问&#x2F;sessionAttributes2，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">null</span><br><span class="line">null</span><br><span class="line">d8783090-da1e-495f-ac48-32a554009e20</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-9-RequestAttribute"><a href="#3-9-RequestAttribute" class="headerlink" title="3.9 @RequestAttribute"></a>3.9 @RequestAttribute</h2><p><strong>与<code>@SessionAttribute</code>类似，可以使用<code>@RequestAttribute</code>注解访问之前创建的预先存在的request域中的属性。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">public class RequestAttributeController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/requestAttribute1&quot;)</span><br><span class="line">    public String handle1(HttpServletRequest request) &#123;</span><br><span class="line">        request.setAttribute(&quot;ra&quot;, &quot;requestAttributeTest&quot;);</span><br><span class="line">        return &quot;/requestAttribute2&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/requestAttribute2&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public void handle2(@RequestAttribute String ra) &#123;</span><br><span class="line">        System.out.println(ra);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-10-重定向参数"><a href="#3-10-重定向参数" class="headerlink" title="3.10 重定向参数"></a>3.10 重定向参数</h2><p><strong>默认情况下，所有的model属性中的基本类型的属性，或者基本类型的数组、集合将自动追加为请求参数。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">public class RedirectAttributesController &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/redirectAttributes1&quot;)</span><br><span class="line">    public String handle1(Model model) &#123;</span><br><span class="line">        model.addAttribute(&quot;a&quot;, &quot;aaa&quot;);</span><br><span class="line">        model.addAttribute(&quot;b&quot;, 111);</span><br><span class="line">        model.addAttribute(&quot;c&quot;, new Object());</span><br><span class="line">        model.addAttribute(&quot;d&quot;, new int[]&#123;1, 2, 3&#125;);</span><br><span class="line">        return &quot;redirect:/redirectAttributes2&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/redirectAttributes2&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public void handle2(@RequestParam MultiValueMap&lt;String, String&gt; map, HttpServletRequest request) &#123;</span><br><span class="line">        System.out.println(map);</span><br><span class="line">        Map&lt;String, String[]&gt; parameterMap = request.getParameterMap();</span><br><span class="line">        System.out.println(parameterMap);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;redirectAttributes1，转发后的URL如下：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bc9f37e549e4501872878f3191f3096~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<p><strong>很明显，model中可能包含其他不需要追加到URL中的参数，因此这不是一个好方法。为此，处理器方法中可以声明类型为RedirectAttributes 的参数，并用它的addAttribute方法来指定要提供给重定向视图的确切属性，如果控制器方法参数中存在RedirectAttributes参数，并且该方法确实进行了重定向，则使用RedirectAttributes的内容，否则，将使用model的内容。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/redirectAttributes3&quot;)</span><br><span class="line">public String handle3(ModelMap model, RedirectAttributes redirectAttributes) &#123;</span><br><span class="line">    model.addAttribute(&quot;a&quot;, &quot;aaa&quot;);</span><br><span class="line">    model.addAttribute(&quot;b&quot;, 111);</span><br><span class="line">    model.addAttribute(&quot;c&quot;, new Object());</span><br><span class="line">    model.addAttribute(&quot;d&quot;, new int[]&#123;1, 2, 3&#125;);</span><br><span class="line"></span><br><span class="line">    redirectAttributes.addAttribute(&quot;a&quot;, &quot;a&quot;);</span><br><span class="line">    redirectAttributes.addAttribute(&quot;b&quot;, 222);</span><br><span class="line">    redirectAttributes.addAttribute(&quot;d&quot;, new int[]&#123;4, 5&#125;);</span><br><span class="line">    return &quot;redirect:/redirectAttributes4&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;/redirectAttributes4&quot;)</span><br><span class="line">@ResponseBody</span><br><span class="line">public void handle4(@RequestParam MultiValueMap&lt;String, String&gt; map, HttpServletRequest request) &#123;</span><br><span class="line">    Map&lt;String, String[]&gt; parameterMap = request.getParameterMap();</span><br><span class="line">    System.out.println(parameterMap);</span><br><span class="line">    System.out.println(map);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>RequestMappingHandlerAdapter</code>提供了一个名为<code>ignoreDefaultModelOnRedirect</code>的标志位属性，将此标志设置为 true 可确保在重定向中永远不会使用默认model属性，即使控制器方法中未声明<code>RedirectAttributes</code>参数也是如此。将其设置为 false 意味着如果控制器方法不声明RedirectAttributes参数，则默认model可能在重定向中使用，默认值为false。该参数还可以通过<code>&lt;mvc:annotation-driven&gt;</code>标签的<code>ignore-default-model-on-redirect</code>属性来配置。</strong></p>
+<p><strong><code>RedirectAttributes的addAttribute</code>方法同样会将属性追加到URL后面，对于隐私性不友好，并且对于复杂对象类型无法传递，为此我们可以使用另一个<code>addFlashAttribute</code>方法，<code>flash attributes</code>将会保存在<code>HTTP session</code>中（因此参数不会出现在URL中）。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/redirectAttributes5&quot;)</span><br><span class="line">public String handle5(ModelMap model, RedirectAttributes redirectAttributes) &#123;</span><br><span class="line">    model.addAttribute(&quot;a&quot;, &quot;aaa&quot;);</span><br><span class="line">    model.addAttribute(&quot;b&quot;, 111);</span><br><span class="line">    model.addAttribute(&quot;c&quot;, new Object());</span><br><span class="line">    model.addAttribute(&quot;d&quot;, new int[]&#123;1, 2, 3&#125;);</span><br><span class="line"></span><br><span class="line">    Object o = new Object();</span><br><span class="line">    System.out.println(o);</span><br><span class="line">    redirectAttributes.addFlashAttribute(&quot;a&quot;, &quot;aaa&quot;);</span><br><span class="line">    redirectAttributes.addFlashAttribute(&quot;b&quot;, 111);</span><br><span class="line">    redirectAttributes.addFlashAttribute(&quot;c&quot;, o);</span><br><span class="line">    redirectAttributes.addFlashAttribute(&quot;d&quot;, new int[]&#123;1, 2, 3&#125;);</span><br><span class="line">    return &quot;redirect:/redirectAttributes6&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;/redirectAttributes6&quot;)</span><br><span class="line">@ResponseBody</span><br><span class="line">public void handle6(@RequestParam MultiValueMap&lt;String, String&gt; map, HttpServletRequest request,</span><br><span class="line">                    @ModelAttribute(&quot;a&quot;) String a, @ModelAttribute(&quot;c&quot;) Object c, @ModelAttribute(&quot;d&quot;) int[] d) &#123;</span><br><span class="line">    //无法获取到参数</span><br><span class="line">    Map&lt;String, String[]&gt; parameterMap = request.getParameterMap();</span><br><span class="line">    System.out.println(parameterMap);</span><br><span class="line">    System.out.println(map);</span><br><span class="line">    //可以通过ModelAttribute获取到参数</span><br><span class="line">    System.out.println(a);</span><br><span class="line">    System.out.println(c);</span><br><span class="line">    System.out.println(Arrays.toString(d));</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;redirectAttributes5，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object@612eabb7</span><br><span class="line">&#123;&#125;</span><br><span class="line">&#123;&#125;</span><br><span class="line">aaa</span><br><span class="line">java.lang.Object@612eabb7</span><br><span class="line">[1, 2, 3]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>并且重定向的URL中不再带有参数：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d28c3536806c405aa31e03b0eb55fa52~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<p><strong>另外，如果重定向到一个页面视图中，那么能直接用el表达式获取对应的值！</strong></p>
+<p><strong>如果存在URI变量，那么在重定向的URL中可以直接使用同名变量！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@PostMapping(&quot;/files/&#123;path&#125;&quot;)</span><br><span class="line">public String upload(...) &#123;</span><br><span class="line">    // ...</span><br><span class="line">    return &quot;redirect:files/&#123;path&#125;&quot;;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-10-1-Flash-Attributes"><a href="#3-10-1-Flash-Attributes" class="headerlink" title="3.10.1 Flash Attributes"></a>3.10.1 Flash Attributes</h3><p><strong><code>Flash attributes</code>为一个请求提供了一种存储用于另一个请求的属性的方法。这在重定向时最常用，例如Post-Redirect-Get模式。<code>Flash attributes</code>在重定向之前被临时保存（通常在session中），以便在重定向之后可供请求使用，并立即被删除。</strong></p>
+<p><strong>Spring MVC有两个主要的抽象类来支持Flash attributes。 一个是<code>FlashMap</code>，它用于保存Flash属性，而另一个是<code>FlashMapManager</code>，它用于存储，检索和管理FlashMap实例。</strong></p>
+<p><strong>Flash attributes的支持始终处于“打开”状态，无需显式启用。但是，如果不使用它，则永远不会导致HTTP session的创建。在每个请求上，都有一个“input（输入）” FlashMap，其属性是从上一个请求（如果有）传递过来的，而“output（输出）” FlashMap的属性是为后续请求保存的。这两个FlashMap实例都可以通过RequestContextUtils中的getInputFlashMap和getOutputFlashMap静态方法在Spring MVC中的任何位置访问。</strong></p>
+<p><strong>基于注解的控制器通常不需要直接使用FlashMap。相反，@RequestMapping方法可以接受RedirectAttributes类型的参数，并使用它为重定向方案添加Flash attributes。通过RedirectAttributes添加的Flash attributes会自动传播到“output（输出）” FlashMap。同样，重定向到目标后，来自“input（输入）” FlashMap的属性会自动添加到服务于目标URL的控制器的model中，这就是在上面的案例中可以使用@ModelAttribute绑定属性以及可以在模型页面中直接通过el获取属性的原因！</strong></p>
+<p><strong>根据上面的描述，我们还可以在控制器方法中通过RequestContextUtils来获取RedirectAttributes传递的属性：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/redirectAttributes7&quot;)</span><br><span class="line">@ResponseBody</span><br><span class="line">public void handle7(HttpServletRequest request,@ModelAttribute(&quot;a&quot;) String a, @ModelAttribute(&quot;c&quot;) Object c, @ModelAttribute(&quot;d&quot;) int[] d) &#123;</span><br><span class="line">    Map&lt;String, ?&gt; inputFlashMap = RequestContextUtils.getInputFlashMap(request);</span><br><span class="line">    System.out.println(inputFlashMap);</span><br><span class="line">    //可以通过ModelAttribute获取到参数</span><br><span class="line">    System.out.println(a);</span><br><span class="line">    System.out.println(c);</span><br><span class="line">    System.out.println(Arrays.toString(d));</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>我们让&#x2F;redirectAttributes5的控制器方法重定向到访问&#x2F;redirectAttributes7，访问&#x2F;redirectAttributes5之后，结果如下：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object@618c3937</span><br><span class="line">FlashMap [attributes=&#123;a=aaa, b=111, c=java.lang.Object@618c3937, d=[I@6d2cd428&#125;, targetRequestPath=/mvc/redirectAttributes7, targetRequestParams=&#123;&#125;]</span><br><span class="line">aaa</span><br><span class="line">java.lang.Object@618c3937</span><br><span class="line">[1, 2, 3]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，input的FlashMap中正好存储着传递的属性！</p>
+<h2 id="3-11-Multipart"><a href="#3-11-Multipart" class="headerlink" title="3.11 Multipart"></a>3.11 Multipart</h2><p><strong>在启用MultipartResolver后，带有multipart&#x2F;form-data的POST请求的内容将被解析并作为常规请求参数进行访问，并且支持使用MultipartFile参数接收上传的文件数据。如下案例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">public class FileUploadController &#123;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/form&quot;)</span><br><span class="line">    public String handleFormUpload(@RequestParam(&quot;name&quot;) String name,</span><br><span class="line">                                   @RequestParam(&quot;file&quot;) MultipartFile file) &#123;</span><br><span class="line"></span><br><span class="line">        if (!file.isEmpty()) &#123;</span><br><span class="line">            byte[] bytes = file.getBytes();</span><br><span class="line">            // store the bytes somewhere</span><br><span class="line">            return &quot;redirect:uploadSuccess&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        return &quot;redirect:uploadFailure&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>将参数类型声明为<code>List&lt;MultipartFile&gt;</code>则表示允许解析相同参数名称的多个文件。</strong></p>
+<p><strong>当@RequestParam 注解声明为<code>Map&lt;String, MultipartFile&gt;</code>或<code>MultiValueMap&lt;String, MultipartFile&gt;</code>时，在注解中未指定参数名称的情况下，将填充映射本次请求中的所有给定参数名称的multipart files。</strong></p>
+<p><strong>在使用 Servlet 3.0 的<code>StandardServletMultipartResolver</code>而不是Apache的<code>CommonsMultipartResolver</code>时，还可以声明<code>javax.servlet.http.part</code>而不是 Spring 的<code>MultipartFile</code>来作为方法参数或集合值类型。</strong></p>
+<p><strong>multipart多部件内容还可以数据绑定到<code>命令对象（即通过@ModelAttribute查找并绑定的参数对象）</code>的某些属性上。</strong></p>
+<p><strong>将<code>@RequestPart</code>与 <code>javax.validation.Valid</code>或Spring 的 <code>@Validated</code>一起使用，可用于多部分文件的校验！</strong></p>
+<p>关于文件上传，后面会专门有文章讲解！</p>
+<h2 id="3-12-RequestBody"><a href="#3-12-RequestBody" class="headerlink" title="3.12 @RequestBody"></a>3.12 @RequestBody</h2><p><strong>可以使用@RequestBody注解通过HttpMessageConverter读取请求正文（通常是JSON字符串）并反序列化为控制器方法的参数对象。在前端分离开发的项目中，通常是采用JSON数据交互，因此该注解非常常用！我们通过mvc配置自定义HttpMessageConverter。</strong></p>
+<p><strong>另外，如果在@ModelAttribute方法中通过@RequestBody从输入流中获取了数据，那么在真正的控制器方法中便不能再次获取，因为<code>ServletInputStream</code>已在@ModelAttribute方法中被使用并被关闭。</strong></p>
+<p><strong>如果是采用JSON数据交互，那么我们应该引入相关<code>JSON依赖</code>，Spring MVC默认依赖<code>jackson</code>来实现JSON的序列化和反序列化，如果存在该jar包，则Spring MVC会自动创建一个<code>MappingJackson2HttpMessageConverter</code>，而无需我们手动注册！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson</span><br><span class="line">-databind --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;2.9.8&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>一个Controller：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class RequestBodyController &#123;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/requestBody&quot;)</span><br><span class="line">    public void handle(@RequestBody User user) &#123;</span><br><span class="line">        System.out.println(user);</span><br><span class="line">        //…………</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class User &#123;</span><br><span class="line"></span><br><span class="line">    private int age;</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;User&#123;&quot; +</span><br><span class="line">                &quot;age=&quot; + age +</span><br><span class="line">                &quot;, name=&#x27;&quot; + name + &#x27;\&#x27;&#x27; +</span><br><span class="line">                &#x27;&#125;&#x27;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;requestBody，并且请求体Content-Type为Content-Type格式，请求体中传递{“age”:12,”name”:”名字”}，结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User&#123;age=12, name=&#x27;名字&#x27;&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>成功的进行了JSON数据的反序列化和封装！</strong></p>
+<p><strong>可以将@RequestBody注解标注的参数继续标注<code>javax.validation.Valid</code> 或 Spring 的 <code>@Validated</code>注解，这两种注解都会导致应用标准 Bean 验证。默认情况下，验证错误会导致<code>MethodArgumentNotValidException</code>，该异常将转换为 400（BAD_REQUEST）响应。或者，可以通过<code>Errors或BindingResult参数</code>在控制器方法内处理异常。关于参数校验，后面会单独讲解！</strong></p>
+<h2 id="3-13-HttpEntity"><a href="#3-13-HttpEntity" class="headerlink" title="3.13 HttpEntity"></a>3.13 HttpEntity</h2><p><strong>HttpEntity参数可以实现@RequestBody的功能，将请求体反序列化为对应泛型类型的对象实例，但是它还提供获取请求头HttpHeaders的功能！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class HttpEntityController &#123;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/httpEntity&quot;)</span><br><span class="line">    public void handle(HttpEntity&lt;User&gt; httpEntity) &#123;</span><br><span class="line">        //获取请求体</span><br><span class="line">        User body = httpEntity.getBody();</span><br><span class="line">        System.out.println(body);</span><br><span class="line">        //获取请求头</span><br><span class="line">        HttpHeaders headers = httpEntity.getHeaders();</span><br><span class="line">        System.out.println(headers);</span><br><span class="line">        //…………</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;httpEntity，并且请求体Content-Type为Content-Type格式，请求体中传递{“age”:12,”name”:”名字”}，结果如下（我采用postman测试）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User&#123;age=12, name=&#x27;名字&#x27;&#125;</span><br><span class="line">[content-type:&quot;application/json&quot;, user-agent:&quot;PostmanRuntime/7.26.5&quot;, accept:&quot;*/*&quot;, cache-control:&quot;no-cache&quot;, postman-token:&quot;9920f335-8cb8-498d-9eaf-3b8f74ee0adb&quot;, host:&quot;localhost:8081&quot;, accept-encoding:&quot;gzip, deflate, br&quot;, connection:&quot;keep-alive&quot;, content-length:&quot;26&quot;]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-14-ResponseBody"><a href="#3-14-ResponseBody" class="headerlink" title="3.14 @ResponseBody"></a>3.14 @ResponseBody</h2><p><strong>我们可以在方法上使用@ResponseBody注解，表示将会通过HttpMessageConverter将控制器方法返回的实体进行序列化并且设置为响应体，而不会走视图解析的逻辑。</strong></p>
+<p><strong>我们此前说的前后端分离以及JSON数据交互的开发方式中，就是通过@RequestBody将前端发送的请求的请求体中的JSON数据反序列化为控制器方法的参数对象实例，通过@ResponseBody将后端控制器方法返回的对象实例序列化为JSON数据然后写入相应体返回给前端！序列化和反序列化都依赖于HttpMessageConverter。</strong></p>
+<p><strong>@ResponseBody也支持在@Controller类上使用，在这种情况下，该类的所有控制器方法都继承该注解。这和使用一个@RestController有同样的效果，它的内部将@Controller和@ResponseBody作为元注解。</strong></p>
+<p>简单的前后端分离的开发方式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class ResponseBodyController &#123;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/responseBody&quot;)</span><br><span class="line">    public User handle(@RequestBody User user) &#123;</span><br><span class="line">        System.out.println(user);</span><br><span class="line">        user.setAge(999);</span><br><span class="line">        user.setName(&quot;responseBody&quot;);</span><br><span class="line">        //返回的实体将会被序列化并且写入响应体，而不会走视图解析的逻辑</span><br><span class="line">        return user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>实际开发中，项目应该统一返回一个结果对象，可能包括响应码、消息、数据这三部分，而不仅仅是数据部分！</strong></p>
+<p><strong>@ResponseBody同样适用于反应式类型的返回结果，比如Servlet3.0的异步请求返回的<code>DeferredResult</code>。</strong></p>
+<h2 id="3-15-ResponseEntity"><a href="#3-15-ResponseEntity" class="headerlink" title="3.15 ResponseEntity"></a>3.15 ResponseEntity</h2><p><strong>ResponseEntity返回值可以实现@ResponseBody的功能，将返回的实体序列化为JSON数据并写入响应体，但是它还提供设置响应码和响应头的功能！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class ResponseEntityController &#123;</span><br><span class="line"></span><br><span class="line">    @PostMapping(&quot;/responseEntity&quot;)</span><br><span class="line">    public ResponseEntity&lt;User&gt; handle(@RequestBody User user) &#123;</span><br><span class="line">        System.out.println(user);</span><br><span class="line">        user.setAge(888);</span><br><span class="line">        user.setName(&quot;responseEntity&quot;);</span><br><span class="line">        return ResponseEntity.ok().header(&quot;header&quot;, &quot;header&quot;).body(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>ResponseEntity同样适用于反应式类型的返回结果，比如Servlet3.0的异步请求返回的DeferredResult。</p>
+<h2 id="3-16-JSON-Views"><a href="#3-16-JSON-Views" class="headerlink" title="3.16 JSON Views"></a>3.16 JSON Views</h2><p><strong>Spring默认了对Jackson JSON库的支持。</strong></p>
+<p>首先我们需要引入jackson的依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson</span><br><span class="line">-databind --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;2.9.8&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>Spring MVC 为<code>Jackson的序列化视图（https://www.baeldung.com/jackson-json-view-annotation）</code>提供内置支持，该视图可以实现只序列化对象中的指定字段。</strong></p>
+<p><strong>若要将它与@ResponseBody或ResponseEntity控制器方法一起使用，可以使用 <code>Jackson 的 @JsonView</code> 注解来激活序列化视图类，如下例所示：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author lx</span><br><span class="line"> */</span><br><span class="line">@RestController</span><br><span class="line">public class JsonViewController &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 在方法上使用@JsonView注解</span><br><span class="line">     */</span><br><span class="line">    @GetMapping(&quot;/client&quot;)</span><br><span class="line">    @JsonView(Client.WithoutPasswordView.class)</span><br><span class="line">    public Client getUser() &#123;</span><br><span class="line">        return new Client(&quot;eric&quot;, &quot;7!jd#h23&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author lx</span><br><span class="line"> */</span><br><span class="line">public class Client &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 该接口用于指示返回的JSON视图没有password字段</span><br><span class="line">     */</span><br><span class="line">    public interface WithoutPasswordView &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 该接口用于指示返回的JSON视图具有password字段</span><br><span class="line">     */</span><br><span class="line">    public interface WithPasswordView extends WithoutPasswordView &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 在字段或者getter方法上标注@JsonView注解</span><br><span class="line">     */</span><br><span class="line">    @JsonView(WithoutPasswordView.class)</span><br><span class="line">    private String username;</span><br><span class="line">    @JsonView(WithPasswordView.class)</span><br><span class="line">    private String password;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public String getUsername() &#123;</span><br><span class="line">        return this.username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getPassword() &#123;</span><br><span class="line">        return this.password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Client() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Client(String username, String password) &#123;</span><br><span class="line">        this.username = username;</span><br><span class="line">        this.password = password;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>上面的案例中，对于实体的字段或者getter方法使用<code>@JsonView</code>注解，并且指定一个类型，在控制器方法上，同样使用<code>@JsonView</code>注解，该注解中具有一个类型，它表示对于实体中所有具有该类型及其父类型的<code>@JsonView</code>注解标注的字段或者getter方法对应的字段都进行序列化，其他字段则不进行序列化！</strong></p>
+<p>我们访问&#x2F;client，结果如下：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/49abea19fa5c4ebbb4871df2376f3723~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<p>可以看到，password字段并没有被序列化，如果我们将控制其方法的@JsonView的类型改为Client.WithPasswordView.class，那么结果如下：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b11bb6ad32b460db9828184336cb9af~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<p>可以看到，password字段已被被序列化！</p>
+<p><strong>实际上@JsonView注解允许传递一个视图类Class数组，即指定多个视图类，但每个控制器方法只能指定一个@JsonView注解。</strong></p>
+<h3 id="3-16-1-Date字段格式化"><a href="#3-16-1-Date字段格式化" class="headerlink" title="3.16.1 Date字段格式化"></a>3.16.1 Date字段格式化</h3><p><strong>默认情况下，Jackson序列化返回的JSON数据中，对于Date类型的字段返回毫秒的时间戳！如下案例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;/date&quot;)</span><br><span class="line">@ResponseBody</span><br><span class="line">public MyDate date() &#123;</span><br><span class="line">    MyDate myDate = new MyDate();</span><br><span class="line">    myDate.setDate(new Date());</span><br><span class="line">    return myDate;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class MyDate &#123;</span><br><span class="line"></span><br><span class="line">    private Date date;</span><br><span class="line"></span><br><span class="line">    public Date getDate() &#123;</span><br><span class="line">        return date;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setDate(Date date) &#123;</span><br><span class="line">        this.date = date;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>访问&#x2F;date，结果如下：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5713ed017809412fa61356cb5ac91345~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<p><strong>Jackson提供了@JsonFormat注解用以支持Date等特殊类型的序列化字段格式，如下配置：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class MyDate &#123;</span><br><span class="line"></span><br><span class="line">    @JsonFormat(</span><br><span class="line">            pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;,</span><br><span class="line">            timezone = &quot;GMT+8&quot;</span><br><span class="line">    )</span><br><span class="line">    private Date date;</span><br><span class="line"></span><br><span class="line">    public Date getDate() &#123;</span><br><span class="line">        return date;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setDate(Date date) &#123;</span><br><span class="line">        this.date = date;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>其中，pattern属性表示Date序列化为字符串的样式，timezone表示时区，因为Jackson在序列化时间时是按照国际标准时间GMT进行格式化的，而在国内默认时区比GMT+8快8小时，因此需要设置时区为“GMT+8”！</strong></p>
+<p>再次访问&#x2F;date，结果如下：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/143d80109d1744aa9eb687dc90022397~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" alt="在这里插入图片描述"></p>
+<p><strong>可以看到返回的date被格式化为了指定样式，这样前端就不必再对时间戳进行二次转换了，而是可以直接展示结果！</strong></p>
+<h2 id="4-Controller-Advice"><a href="#4-Controller-Advice" class="headerlink" title="4 Controller Advice"></a>4 Controller Advice</h2><p><strong>通常，<code>@ExceptionHandler，@InitBinder和@ModelAttribute</code>方法在声明它们的@Controller类（或类层次结构）中生效。如果要使此这些方法更全局地应用（跨不同的控制器），则可以在标有<code>@ControllerAdvice或@RestControllerAdvice</code>的类中声明它们。</strong></p>
+<p><strong>@ControllerAdvice注解采用<code>@Component</code>作为元注解诶，这意味着可以通过组件扫描将此类注册为Spring Bean。 @RestControllerAdvice则将<code>@ControllerAdvice和@ResponseBody</code>作为元注解，这意味着<code>@ExceptionHandler</code>方法的返回值可以通过HttpMessageConverter进行序列化（比如转换为<code>JSON字符串</code>）并添加到响应体。</strong></p>
+<p><strong>在启动时，具有@RequestMapping和@ExceptionHandler方法的类将会检测@ControllerAdvice类型的Spring bean，然后在运行时应用其方法。<code>全局@ExceptionHandler</code>方法（来自@ControllerAdvice）在<code>本地@ExceptionHandler</code>方法（来自@Controller）之后应用。相比之下，<code>全局@ModelAttribute和@InitBinder</code>方法则在<code>本地@ModelAttribute和@InitBinder</code>方法之前应用。</strong></p>
+<p><strong>多个@ControllerAdvice或@RestControllerAdvice类支持<code>order排序</code>，可实现Ordered、PriorityOrdered接口，或者采用@Order、@Priority注解。比较优先级为PriorityOrdered&gt;Ordered&gt;@Order&gt;@Priority，如果没有order值，那么将返回Integer.MAX_VALUE，即最低优先级。</strong></p>
+<p><strong>默认情况下，@ControllerAdvice方法可以应用于每个请求（就是所有控制器的所有方法），但可以使用注解上的属性将其缩小应用范围：</strong></p>
+<ol>
+<li>@ControllerAdvice具有<code>annotations</code>属性，它是一个Annotation类型的Class数组，表示生效的目标是所有至少使用了其中一个给定注解的控制器！</li>
+<li>@ControllerAdvice具有<code>value和basePackages</code>属性，它是一个String类型的数组，表示生效的目标是所有至少属于其中一个包以及子包路径下的控制器！</li>
+<li>@ControllerAdvice具有<code>assignableTypes</code>属性，它是一个Class类型的数组，表示生效的目标是所有至少属于其中一个类型的控制器！</li>
+<li>如果声明了<code>多个选择器</code>，那么只要某个控制器只需要符合其中一个。另外，选择器检查在运行时执行，因此添加许多选择器可能会对性能产生负面影响并增加复杂性。</li>
+</ol>
+<p><strong>@ExceptionHandler用于异常处理，@InitBinder用于数据绑定时的类型转换</strong></p>
+
+            
+        </div>
+        <footer class="article-footer">
+            <a data-url="https://yumubi.github.io/2023/05/22/2023-04-24-%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84Controller%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E5%85%A8%E8%A7%A3/" data-id="clhya781f0008c8vk5t0havx7" data-title="SpringMVC控制器粗解"
+               class="article-share-link">分享</a>
+            
+            
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li></ul>
+
+        </footer>
+    </div>
+    
+        
+    <nav id="article-nav">
+        
+            <div class="article-nav-link-wrap article-nav-link-left">
+                
+                    
+                    
+                        <img data-src="/covers/wallhaven-odgze9_3840x2160.png" data-sizes="auto" alt="idea快捷键" class="lazyload">
+                    
+                
+                <a href="/2023/05/22/idea%E5%BF%AB%E6%8D%B7%E9%94%AE/"></a>
+                <div class="article-nav-caption">前一篇</div>
+                <div class="article-nav-title">
+                    
+                        idea快捷键
+                    
+                </div>
+            </div>
+        
+        
+            <div class="article-nav-link-wrap article-nav-link-right">
+                
+                    
+                    
+                        <img data-src="/covers/wallhaven-2k8mlx_1920x1080.png" data-sizes="auto" alt="python" class="lazyload">
+                    
+                
+                <a href="/2023/05/22/2023-04-15-python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/"></a>
+                <div class="article-nav-caption">后一篇</div>
+                <div class="article-nav-title">
+                    
+                        python
+                    
+                </div>
+            </div>
+        
+    </nav>
+
+    
+</article>
+
+</section>
+                
+                    <aside id="sidebar">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="yumubi" class="lazyload">
+            <div class="sidebar-author-name">yumubi</div>
+            <div class="sidebar-description">Eat Goji Berries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%BF%E5%AD%90/">板子</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 10px;">信息论</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a></li></ul>
+        </div>
+    </div>
+
+
+    
+</aside>
+                
+            </div>
+            <footer id="footer">
+    <div class="footer-line"></div>
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            
+            <div>
+                <span class="icon-copyright"></span>
+                2022-2023
+                <span class="footer-info-sep"></span>
+                yumubi
+            </div>
+            
+                <div>
+                    基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+                    Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+                </div>
+            
+            
+                <div>
+                    <span class="icon-brush"></span>
+                    26.6k
+                    &nbsp;|&nbsp;
+                    <span class="icon-coffee"></span>
+                    01:48
+                </div>
+            
+            
+                <div>
+                    <span class="icon-eye"></span>
+                    <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+                    &nbsp;|&nbsp;
+                    <span class="icon-user"></span>
+                    <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+                </div>
+            
+        </div>
+    </div>
+</footer>
+  
+        </div>
+        <nav id="mobile-nav">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="yumubi" class="lazyload">
+            <div class="sidebar-author-name">yumubi</div>
+            <div class="sidebar-description">Eat Goji Berries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+</nav>
+        
+<script src="https://unpkg.com/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+<script src="https://unpkg.com/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/busuanzi@2.3.0/bsz.pure.mini.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+
+
+
+
+    </div>
+    <div class="site-search">
+        <div class="algolia-popup popup">
+            <div class="algolia-search">
+                <span class="algolia-search-input-icon"></span>
+                <div class="algolia-search-input" id="algolia-search-input"></div>
+            </div>
+
+            <div class="algolia-results">
+                <div id="algolia-stats"></div>
+                <div id="algolia-hits"></div>
+                <div id="algolia-pagination" class="algolia-pagination"></div>
+            </div>
+
+            <span class="popup-btn-close"></span>
+        </div>
+    </div>
+    <!-- hexo injector body_end start -->
+<script src="/js/insertHighlight.js"></script>
+<!-- hexo injector body_end end --></body>
+    </html>
+

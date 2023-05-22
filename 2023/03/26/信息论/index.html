@@ -1,0 +1,589 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-CN"
+            
+    >
+    <head>
+    <meta charset="utf-8">
+    
+    
+    <title>
+        信息论 |
+        
+        Goji</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="信息论理论部分背景信息熵来描述信源的不确定度 信息熵的提出解决了对信息的量化度量问题.（应注意，信息量不等同于信息熵）  上述定义可以看出，熵是对于随机变量而言的，那么又是如何与信息量联系起来的呢？ 熵与信息量虽然我们有了信息熵的公式，但抽象且不容易理解. 应该如何理解信息熵呢？下面是维基百科中给出的一句解释：  In information theory, the entropy of a ra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息论">
+<meta property="og:url" content="https://yumubi.github.io/2023/03/26/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">
+<meta property="og:site_name" content="Goji">
+<meta property="og:description" content="信息论理论部分背景信息熵来描述信源的不确定度 信息熵的提出解决了对信息的量化度量问题.（应注意，信息量不等同于信息熵）  上述定义可以看出，熵是对于随机变量而言的，那么又是如何与信息量联系起来的呢？ 熵与信息量虽然我们有了信息熵的公式，但抽象且不容易理解. 应该如何理解信息熵呢？下面是维基百科中给出的一句解释：  In information theory, the entropy of a ra">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image-20221017001949236.4o3ikhmsgwa0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.3vspiju8pxk0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6lcixlwgfcg0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.5hizl38eujg0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.4kgyahq7l1c0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.5ldbw84mm7g0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.67nm57drdnw0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.58ewmqjrsvw0.webp">
+<meta property="article:published_time" content="2023-03-26T11:32:32.000Z">
+<meta property="article:modified_time" content="2023-05-07T08:35:29.781Z">
+<meta property="article:author" content="yumubi">
+<meta property="article:tag" content="信息论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image-20221017001949236.4o3ikhmsgwa0.webp">
+    
+        <link rel="alternate" href="/atom.xml" title="Goji" type="application/atom+xml">
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    
+    
+        
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui/dist/fancybox.css">
+
+    
+    
+    
+<script src="https://unpkg.com/pace-js@1.2.4/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+  
+    <body>
+    <div id="container">
+        <div id="wrap">
+            <header id="header">
+    
+        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/banner.57axhcaoefc0.webp" data-sizes="auto" alt="信息论" class="lazyload">
+    
+    <div id="header-outer" class="outer">
+        <div id="header-title" class="inner">
+            <h1 id="logo-wrap">
+                
+                    
+                    
+                        <a href="/" id="logo">信息论</a>
+                    
+                
+            </h1>
+            
+                
+                
+            
+        </div>
+        <div id="header-inner">
+            <nav id="main-nav">
+                <a id="main-nav-toggle" class="nav-icon"></a>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/">首页</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/archives">归档</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/about">关于</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/friend">友链</a>
+                    </span>
+                
+            </nav>
+            <nav id="sub-nav">
+                
+                    <a id="nav-rss-link" class="nav-icon" href="/atom.xml"
+                       title="RSS 订阅"></a>
+                
+                
+            </nav>
+            <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yumubi.github.io"></form>
+            </div>
+        </div>
+    </div>
+</header>
+  
+            <div id="content" class="outer">
+                <section id="main"><article id="post-信息论" class="h-entry article article-type-post"
+         itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="article-inner">
+        <div class="article-meta">
+            <div class="article-date">
+    <a href="/2023/03/26/%E4%BF%A1%E6%81%AF%E8%AE%BA/" class="article-date-link">
+        <time datetime="2023-03-26T11:32:32.000Z"
+              itemprop="datePublished">2023-03-26</time>
+    </a>
+</div>
+
+            
+    <div class="article-category">
+        <a class="article-category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+        </div>
+        <div class="hr-line"></div>
+        
+        <div class="e-content article-entry" itemprop="articleBody">
+            
+                <h2 id="信息论理论部分"><a href="#信息论理论部分" class="headerlink" title="信息论理论部分"></a>信息论理论部分</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>信息熵来描述信源的<strong>不确定度</strong></p>
+<p><strong>信息熵的提出解决了对信息的量化度量问题</strong>.（应注意，信息量不等同于信息熵）</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image-20221017001949236.4o3ikhmsgwa0.webp" alt="image-20221017001949236"></p>
+<p>上述定义可以看出，熵是对于随机变量而言的，那么又是如何与信息量联系起来的呢？</p>
+<h3 id="熵与信息量"><a href="#熵与信息量" class="headerlink" title="熵与信息量"></a>熵与信息量</h3><p>虽然我们有了信息熵的公式，但抽象且不容易理解. 应该如何理解信息熵呢？下面是维基百科中给出的一句解释：</p>
+<blockquote>
+<p>In information theory, the entropy of a random variable is the average level of “information”, “surprise”, or “uncertainty” inherent in the variable’s possible outcomes.</p>
+</blockquote>
+<p>也就是说，一个随机变量的熵是指该变量可能的结果所蕴含的<strong>不确定性</strong>的平均水平.</p>
+<p>举个例子，对于一枚不均衡的硬币，抛掷它时以概率 p 正面朝上，以概率 1−p 反面朝上. 则容易理解，当 p&#x3D;1&#x2F;2 时，抛出一枚硬币的不确定性最大，即很难判断抛出后哪一面朝上；当 p 接近 1（或 0）时，这种不确定性减小，直到 p&#x3D;1（或 p&#x3D;0）时不确定性最小，这时即使不抛该硬币，我们也确定的知道哪一面朝上.</p>
+<p>我们就用熵来定量衡量这种随机事件的不确定性</p>
+<p>信息论中有一句常见的口诀：“不确定性越多（概率越低），信息量越大；不确定性越低（概率越高），信息量越小“，也就是对信源来说，所发出的信号对于接受者可以看作随机变量，接受者在接受前对该变量的不确定性越大，则接收到后所“消除”的不确定越大，则获得的信息量越大</p>
+<p>信息熵不等同于信息量，但它们在量上是相等的. 即，“熵”度量了不确定性，而接受信息后所消除的不确定性即为该信息的“量”.</p>
+<p>信息量和熵都是相对于某一主体来说的，即同一个信息对于不同的人而言信息量不同，同一件不确定的事情对于不同的人所蕴含的熵也不同.</p>
+<p><strong>当一条信息出现的时候，也意味着背后的随机性的消失。信息熵是对系统背后所有随机可能性的度量，信息量是指特定信息能够消除多少随机性（熵）。</strong></p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.3vspiju8pxk0.webp" alt="image"></p>
+<p>其中：</p>
+<ul>
+<li>H(X)表示系统X的信息熵；</li>
+<li>U是系统X所有可能的集合；</li>
+<li>P(x)表示信息x发生的概率，例如“骰子落地显示5点”这个信息的发生概率是1&#x2F;6；</li>
+<li>h(x)表示信息x所携带的信息量；</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6lcixlwgfcg0.webp" alt="image"></p>
+<h3 id="定量"><a href="#定量" class="headerlink" title="定量"></a>定量</h3><p>熵的基本单位被定义为等概率 0−1 分布随机变量的不确定性，记作 1bit. 也就是说抛一枚均匀的硬币，对于哪面朝上这一事件包含的不确定性的量是 1 bit 熵.</p>
+<p>抛掷 2 均匀枚硬币结果的不确定性即为 2 bit. 容易理解，对于抛掷 n 枚硬币而言，其熵为 n bit. 因此，所有与抛掷硬币分布相同的随机变量其熵都可以被类似的计算.</p>
+<p>对于等概率事件仍可以类似量化，比如对于猜一道有四个选项的选择题的答案，那么四个答案的概率均等分布，与先后掷两枚硬币的分布是等同的，因此其熵为<code> 2 bit</code> 类似地，对于有 8&#x3D;2^3^个等可能结果的分布，与掷 3 枚硬币等同，其熵为 log<sub>2</sub>⁡8&#x3D;3 bit. 将其<strong>推广</strong>至有 n 个等可能结果的概率分布，其熵为</p>
+<p>log<sub>2</sub>⁡n&#x3D;log<sub>2</sub>⁡ 1&#x2F;p bit</p>
+<p>其中 p&#x3D;1&#x2F;n 为每个结果发生的概率.</p>
+<p>对于不等概率的分布将如何计算呢？公式中展示出了加权的思想，即把每一个结果都看作等可能事件中的一个结果，按照其发生的概率加权求和.</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.5hizl38eujg0.webp" alt="image"></p>
+<h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><p>香农总结出了信息熵的三条性质：</p>
+<ol>
+<li>单调性，即发生概率越高的事件，其所携带的信息熵越低.</li>
+<li>非负性，即信息熵不能为负.</li>
+<li>累加性，即多随机事件同时发生的的总不确定性的度量可以表示为各事件不确定性的度量的和，</li>
+</ol>
+<p>​	也即：</p>
+<p>​	对于相互独立的随机变量 X,Y：</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.4kgyahq7l1c0.webp" alt="image"></p>
+<h3 id="信息量（Quantities-of-information）"><a href="#信息量（Quantities-of-information）" class="headerlink" title="信息量（Quantities of information）"></a>信息量（Quantities of information）</h3><p>信息量是衡量信息多少的度量，其值等于获得该信息后减少的随机变量不确定性量.</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.5ldbw84mm7g0.webp" alt="image"></p>
+<blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="https://xiaosheng.run/2017/03/09/how-to-measure-information.html">https://xiaosheng.run/2017/03/09/how-to-measure-information.html</a></p>
+<p>:link:<a target="_blank" rel="noopener" href="https://www.showmeai.tech/article-detail/164">https://www.showmeai.tech/article-detail/164</a></p>
+</blockquote>
+<blockquote>
+<p><strong>（1）信息熵只反映内容的随机性，与内容本身无关。</strong>不管是什么样内容的文件，只要服从同样的概率分布，就会计算得到同样的信息熵。</p>
+<p><strong>（2）信息熵越大，表示占用的二进制位越长，因此就可以表达更多的符号。</strong>所以，人们有时也说，信息熵越大，表示信息量越大。不过，由于第一点的原因，这种说法很容易产生误导。较大的信息熵，只表示可能出现的符号较多，并不意味着你可以从中得到更多的信息。</p>
+<p><strong>（3）信息熵与热力学的熵，基本无关。</strong>这两个熵不是同一件事，信息熵表示无序的信息，热力学的熵表示无序的能量</p>
+</blockquote>
+<h2 id="信息论入门"><a href="#信息论入门" class="headerlink" title="信息论入门"></a>信息论入门</h2><p>第一封信写着”狗猫鱼鸟”，第二封信写”鱼猫鸟狗”。</p>
+<p>信件需要二进制编码，在互联网传递。两个二进制位就可以表示四个词汇。</p>
+<blockquote>
+<ul>
+<li>狗 00</li>
+<li>猫 01</li>
+<li>鱼 10</li>
+<li>鸟 11</li>
+</ul>
+</blockquote>
+<p>所以，第一封信”狗猫鱼鸟”的编码是<code>00011011</code>，第二封信”鱼猫鸟狗”的编码是<code>10011100</code>。</p>
+<h2 id="词汇的分布"><a href="#词汇的分布" class="headerlink" title="词汇的分布"></a>词汇的分布</h2><p>最近，小张开始养狗，信里提到狗的次数，多于其他词汇。假定概率分布如下。</p>
+<blockquote>
+<ul>
+<li>狗：50%</li>
+<li>猫：25%</li>
+<li>鱼：12.5%</li>
+<li>鸟：12.5%</li>
+</ul>
+</blockquote>
+<p>小张的最新一封信是这样的。</p>
+<blockquote>
+<p>狗狗狗狗猫猫鱼鸟</p>
+</blockquote>
+<p>上面这封信，用前一节的方法进行编码。</p>
+<blockquote>
+<p>0000000001011011</p>
+</blockquote>
+<p>一共需要16个二进制。互联网的流量费很贵，有没有可能找到一种更短编码方式？</p>
+<p>很容易想到，”狗”的出现次数最多，给它分配更短的编码，就能减少总的长度。请看下面的编码方式。</p>
+<blockquote>
+<ul>
+<li>狗 0</li>
+<li>猫 10</li>
+<li>鱼 110</li>
+<li>鸟 111</li>
+</ul>
+</blockquote>
+<p>使用新的编码方式，小张的信”狗狗狗狗猫猫鱼鸟”编码如下。</p>
+<blockquote>
+<p>00001010110111</p>
+</blockquote>
+<p>这时只需要14个二进制位，相当于把原来的编码压缩了12.5%。</p>
+<p>根据新的编码，每个词只需要1.75个二进制位（14 &#x2F; 8）。可以证明，这是最短的编码方式，不可能找到更短的编码，详见后文。</p>
+<h2 id="编码方式的唯一性"><a href="#编码方式的唯一性" class="headerlink" title="编码方式的唯一性"></a>编码方式的唯一性</h2><p>前一节的编码方式，狗的编码是<code>0</code>，这里的问题是，可以把这个编码改成<code>1</code>吗，即下面的编码可行吗？</p>
+<blockquote>
+<ul>
+<li>狗 1</li>
+<li>猫 10</li>
+<li>鱼 110</li>
+<li>鸟 111</li>
+</ul>
+</blockquote>
+<p>回答是否定的。如果狗的编码是<code>1</code>，会造成无法解码，即解码结果不唯一。<code>110</code>有可能是”狗猫”，也可能是”鱼”。只有”狗”为<code>0</code>，才不会造成歧义。</p>
+<p>下面是数学证明。一个二进制位有两种可能<code>0</code>和<code>1</code>，如果某个事件有多于两种的结果（比如本例是四种可能），就只能让<code>0</code>或<code>1</code>其中一个拥有特殊含义，另一个必须空出来，保证能够唯一解码。比如，<code>0</code>表示狗，<code>1</code>就必须空出来，不能有特殊含义。</p>
+<p>同理，两个二进制位可以表示四种可能：<code>00</code>、<code>01</code>、<code>10</code>和<code>11</code>。上例中，<code>0</code>开头的编码不能用了，只剩下<code>10</code>和<code>11</code>可用，用<code>10</code>表示猫，为了表示”鱼”和”鸟”，必须将<code>11</code>空出来，使用三个二进制位表示。</p>
+<p>这就是，上一节的编码方式是如何产生的。	</p>
+<h3 id="编码与概率的关系"><a href="#编码与概率的关系" class="headerlink" title="编码与概率的关系"></a>编码与概率的关系</h3><p>根据前面的讨论，可以得到一个结论：<strong>概率越大，所需要的二进制位越少。</strong></p>
+<blockquote>
+<ul>
+<li>狗的概率是50%，表示每两个词汇里面，就有一个是狗，因此单独分配给它1个二进制位。</li>
+<li>猫的概率是25%，分配给它两个二进制位。</li>
+<li>鱼和鸟的概率是12.5%，分配给它们三个二进制位。</li>
+</ul>
+</blockquote>
+<p>香农给出了一个数学公式。<code>L</code>表示所需要的二进制位，<code>p(x)</code>表示发生的概率，它们的关系如下。<img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.67nm57drdnw0.webp" alt="image"></p>
+<p>通过上面的公式，可以计算出某种概率的结果所需要的二进制位。举例来说，”鱼”的概率是<code>0.125</code>，它的倒数为<code>8</code>， 以 2 为底的对数就是<code>3</code>，表示需要3个二进制位。</p>
+<p>知道了每种概率对应的编码长度，就可以计算出一种概率分布的平均编码长度。<img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.58ewmqjrsvw0.webp" alt="image"></p>
+<p>上面公式的<code>H</code>，就是该种概率分布的平均编码长度。理论上，这也是最优编码长度，不可能获得比它更短的编码了。</p>
+<p>接着上面的例子，看看这个公式怎么用。小张养狗之前，”狗猫鱼鸟”是均匀分布，每个词平均需要2个二进制位。</p>
+<blockquote>
+<p>H &#x3D; 0.25 x 2 + 0.25 x 2 + 0.25 x 2 + 0.25 x 2<br>&#x3D; 2</p>
+</blockquote>
+<p>养狗之后，”狗猫鱼鸟”不是均匀分布，每个词平均需要1.75个二进制位。</p>
+<blockquote>
+<p>H &#x3D; 0.5 x 1 + 0.25 x 2 + 0.125 x 3 + 0.125 x 3<br>&#x3D; 1.75</p>
+</blockquote>
+<p>既然每个词是 1.75 个二进制位，”狗狗狗狗猫猫鱼鸟”这8个词的句子，总共需要14个二进制位（8 x 1.75）。</p>
+<h3 id="信息与压缩"><a href="#信息与压缩" class="headerlink" title="信息与压缩"></a>信息与压缩</h3><p>很显然，不均匀分布时，某个词出现的概率越高，编码长度就会越短。</p>
+<p>从信息的角度看，如果信息内容存在大量冗余，重复内容越多，可以压缩的余地就越大。日常生活的经验也是如此，一篇文章翻来覆去都是讲同样的内容，摘要就会很短。反倒是，每句话意思都不一样的文章，很难提炼出摘要。</p>
+<p>图片也是如此，单调的图片有好的压缩效果，细节丰富的图片很难压缩。</p>
+<p>由于信息量的多少与概率分布相关，所以在信息论里面，信息被定义成不确定性的相关概念：概率分布越分散，不确定性越高，信息量越大；反之，信息量越小。</p>
+<h3 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h3><p>前面公式里的<code>H</code>（平均编码长度），其实就是信息量的度量。<code>H</code>越大，表示需要的二进制位越多，即可能发生的结果越多，不确定性越高。</p>
+<p>比如，<code>H</code>为<code>1</code>，表示只需要一个二进制位，就能表示所有可能性，那就只可能有两种结果。如果<code>H</code>为<code>6</code>，六个二进制位表示有64种可能性，不确定性大大提高。</p>
+<p>信息论借鉴了物理学，将<code>H</code>称为”信息熵”（information entropy）。在物理学里，<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/04/entropy.html">熵</a>表示无序，越无序的状态，熵越高。</p>
+<h3 id="信息量的实例"><a href="#信息量的实例" class="headerlink" title="信息量的实例"></a>信息量的实例</h3><p>最后，来看一个例子。如果一个人的词汇量为10万，意味着每个词有10万种可能，均匀分布时，每个词需要 16.61 个二进制位。</p>
+<blockquote>
+<p>log₂(100, 000) &#x3D; 16.61</p>
+</blockquote>
+<p>所以，一篇1000个词的文章，需要 1.6 万个二进制位（约为 2KB）。</p>
+<blockquote>
+<p>16.61 x 1000 &#x3D; 16,610</p>
+</blockquote>
+<p>相比之下，一张 480 x 640、16级灰度的图片，需要123万个二进制位（约为 150KB）。</p>
+<blockquote>
+<p>480 x 640 x log₂(16) &#x3D; 1,228,800</p>
+</blockquote>
+<p>所以，一幅图片所能传递的信息远远超过文字，这就是”一图胜千言”吧。</p>
+<p>上面的例子是均匀分布的情况，现实生活中，一般都是不均匀分布，因此文章或图片的实际文件大小都是可以大大压缩的。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="https://blog.csdn.net/liang_wen_bo/article/details/8797679">科学方法论–信息论、老鼠毒药问题、称球问题</a></p>
+</blockquote>
+<blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="https://www.woshipm.com/zhichang/5314137.html">经典腾讯面试题：小白鼠试毒问题</a></p>
+</blockquote>
+<blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="https://blog.csdn.net/mantoureganmian/article/details/99691419#_5">信息熵–硬币称重问题-详解</a></p>
+</blockquote>
+<blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903630147944462">谷歌面试题之-12球称重问题 - 掘金 (juejin.cn)</a></p>
+</blockquote>
+<blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="https://pywonderland.com/coin-and-coding-theory/#%E7%A7%B0%E7%A1%AC%E5%B8%81%E9%97%AE%E9%A2%98">称硬币问题、小白鼠找毒药问题与编码理论</a></p>
+</blockquote>
+<blockquote>
+<p>:link:<a target="_blank" rel="noopener" href="http://mindhacks.cn/2008/06/13/why-is-quicksort-so-quick/">数学之美番外篇：快排为什么那样快</a></p>
+</blockquote>
+
+            
+        </div>
+        <footer class="article-footer">
+            <a data-url="https://yumubi.github.io/2023/03/26/%E4%BF%A1%E6%81%AF%E8%AE%BA/" data-id="clhya786u000qc8vkdxatcyt3" data-title="信息论"
+               class="article-share-link">分享</a>
+            
+            
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag">信息论</a></li></ul>
+
+        </footer>
+    </div>
+    
+        
+    <nav id="article-nav">
+        
+            <div class="article-nav-link-wrap article-nav-link-left">
+                
+                    <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/成田路哭哭片段-up2x.5dhy8ingof80.png" data-sizes="auto" alt="Arrays工具类"
+                         class="lazyload">
+                
+                <a href="/2023/05/22/2023-04-15-Arrays%E5%B7%A5%E5%85%B7%E7%B1%BB/"></a>
+                <div class="article-nav-caption">前一篇</div>
+                <div class="article-nav-title">
+                    
+                        Arrays工具类
+                    
+                </div>
+            </div>
+        
+        
+    </nav>
+
+    
+</article>
+
+</section>
+                
+                    <aside id="sidebar">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="yumubi" class="lazyload">
+            <div class="sidebar-author-name">yumubi</div>
+            <div class="sidebar-description">Eat Goji Berries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%BF%E5%AD%90/">板子</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 10px;">信息论</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a></li></ul>
+        </div>
+    </div>
+
+
+    
+</aside>
+                
+            </div>
+            <footer id="footer">
+    <div class="footer-line"></div>
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            
+            <div>
+                <span class="icon-copyright"></span>
+                2022-2023
+                <span class="footer-info-sep"></span>
+                yumubi
+            </div>
+            
+                <div>
+                    基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+                    Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+                </div>
+            
+            
+                <div>
+                    <span class="icon-brush"></span>
+                    26.6k
+                    &nbsp;|&nbsp;
+                    <span class="icon-coffee"></span>
+                    01:48
+                </div>
+            
+            
+                <div>
+                    <span class="icon-eye"></span>
+                    <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+                    &nbsp;|&nbsp;
+                    <span class="icon-user"></span>
+                    <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+                </div>
+            
+        </div>
+    </div>
+</footer>
+  
+        </div>
+        <nav id="mobile-nav">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="yumubi" class="lazyload">
+            <div class="sidebar-author-name">yumubi</div>
+            <div class="sidebar-description">Eat Goji Berries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+</nav>
+        
+<script src="https://unpkg.com/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+<script src="https://unpkg.com/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/busuanzi@2.3.0/bsz.pure.mini.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+
+
+
+
+    </div>
+    <div class="site-search">
+        <div class="algolia-popup popup">
+            <div class="algolia-search">
+                <span class="algolia-search-input-icon"></span>
+                <div class="algolia-search-input" id="algolia-search-input"></div>
+            </div>
+
+            <div class="algolia-results">
+                <div id="algolia-stats"></div>
+                <div id="algolia-hits"></div>
+                <div id="algolia-pagination" class="algolia-pagination"></div>
+            </div>
+
+            <span class="popup-btn-close"></span>
+        </div>
+    </div>
+    <!-- hexo injector body_end start -->
+<script src="/js/insertHighlight.js"></script>
+<!-- hexo injector body_end end --></body>
+    </html>
+

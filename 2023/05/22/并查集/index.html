@@ -1,0 +1,517 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-CN"
+            
+    >
+    <head>
+    <meta charset="utf-8">
+    
+    
+    <title>
+        并查集 |
+        
+        Goji</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="quick-find123456789101112131415161718192021222324252627282930package algorithms4th;public class UF &amp;#123;    private int[] id;    private int count;    public UF(int N)  &amp;#123;        count &#x3D; N;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并查集">
+<meta property="og:url" content="https://yumubi.github.io/2023/05/22/%E5%B9%B6%E6%9F%A5%E9%9B%86/index.html">
+<meta property="og:site_name" content="Goji">
+<meta property="og:description" content="quick-find123456789101112131415161718192021222324252627282930package algorithms4th;public class UF &amp;#123;    private int[] id;    private int count;    public UF(int N)  &amp;#123;        count &#x3D; N;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/df8f13d7c2ced300bdc67c6217dd0c64-16755103819311.4q2pe2d7udq0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/3d034fd95fe32082b1a17ff647a1deb6.6u62lryijy80.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/7b40abb36a561e89f2645faf3825c4ff.6t5u5japcvw0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/3ad8a24fa5ab82d1a9972344d473a754-16654687635695.4pt20ckys1e0.webp">
+<meta property="article:published_time" content="2023-05-22T02:55:20.396Z">
+<meta property="article:modified_time" content="2023-05-22T02:43:47.034Z">
+<meta property="article:author" content="yumubi">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/df8f13d7c2ced300bdc67c6217dd0c64-16755103819311.4q2pe2d7udq0.webp">
+    
+        <link rel="alternate" href="/atom.xml" title="Goji" type="application/atom+xml">
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    
+    
+        
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui/dist/fancybox.css">
+
+    
+    
+    
+<script src="https://unpkg.com/pace-js@1.2.4/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+  
+    <body>
+    <div id="container">
+        <div id="wrap">
+            <header id="header">
+    
+        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/banner.57axhcaoefc0.webp" data-sizes="auto" alt="并查集" class="lazyload">
+    
+    <div id="header-outer" class="outer">
+        <div id="header-title" class="inner">
+            <h1 id="logo-wrap">
+                
+                    
+                    
+                        <a href="/" id="logo">并查集</a>
+                    
+                
+            </h1>
+            
+                
+                
+            
+        </div>
+        <div id="header-inner">
+            <nav id="main-nav">
+                <a id="main-nav-toggle" class="nav-icon"></a>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/">首页</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/archives">归档</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/about">关于</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/friend">友链</a>
+                    </span>
+                
+            </nav>
+            <nav id="sub-nav">
+                
+                    <a id="nav-rss-link" class="nav-icon" href="/atom.xml"
+                       title="RSS 订阅"></a>
+                
+                
+            </nav>
+            <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yumubi.github.io"></form>
+            </div>
+        </div>
+    </div>
+</header>
+  
+            <div id="content" class="outer">
+                <section id="main"><article id="post-并查集" class="h-entry article article-type-post"
+         itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="article-inner">
+        <div class="article-meta">
+            <div class="article-date">
+    <a href="/2023/05/22/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="article-date-link">
+        <time datetime="2023-05-22T02:55:20.396Z"
+              itemprop="datePublished">2023-05-22</time>
+    </a>
+</div>
+
+            
+    <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%9D%BF%E5%AD%90/">板子</a>
+    </div>
+
+        </div>
+        <div class="hr-line"></div>
+        
+        <div class="e-content article-entry" itemprop="articleBody">
+            
+                <h2 id="quick-find"><a href="#quick-find" class="headerlink" title="quick-find"></a><code>quick-find</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> algorithms4th;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UF</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UF</span><span class="params">(<span class="type">int</span> N)</span>  &#123;</span><br><span class="line">        count = N;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">connected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id[p];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pID</span> <span class="operator">=</span> find(p);</span><br><span class="line">        <span class="type">int</span> <span class="variable">qID</span> <span class="operator">=</span> find(q);</span><br><span class="line">        <span class="keyword">if</span>(pID == qID) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i++) </span><br><span class="line">            <span class="keyword">if</span>(id[i] == pID) id[i] = qID;</span><br><span class="line">            count--;        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="quick-union"><a href="#quick-union" class="headerlink" title="quick-union"></a><code>quick-union</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span>(p != id[p]) p = id[p];</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>&#123;</span><br><span class="line">   <span class="type">int</span> <span class="variable">pRoot</span> <span class="operator">=</span> find(p);</span><br><span class="line">   <span class="type">int</span> <span class="variable">qRoot</span> <span class="operator">=</span> find(q);</span><br><span class="line">   <span class="keyword">if</span>(pRoot == qRoot) <span class="keyword">return</span>;</span><br><span class="line">   id[pRoot] = qRoot;</span><br><span class="line">   count--;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WeightedQunickUnion"><a href="#WeightedQunickUnion" class="headerlink" title="WeightedQunickUnion"></a><code>WeightedQunickUnion</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> algorithms4th;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeightedQuickUnionUF</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] sz;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">WeightedQuickUnionUF</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        count = N;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) id[i] = i;</span><br><span class="line">        sz = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) sz[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span> &#123;<span class="keyword">return</span> count;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">connected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;<span class="keyword">return</span> find(p) == find(q);&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(p != id[p]) p = id[p];</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> find(p);</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> find(q);</span><br><span class="line">        <span class="keyword">if</span>(sz[i] &lt; sz[j]) &#123;</span><br><span class="line">            id[i] = j;</span><br><span class="line">            sz[j] += sz[i];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            id[j] = id[i];</span><br><span class="line">            sz[i] += sz[j];</span><br><span class="line">        &#125;</span><br><span class="line">        count--;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="路径压缩优化"><a href="#路径压缩优化" class="headerlink" title="路径压缩优化"></a>路径压缩优化</h5><blockquote>
+<p>尝试在 find 的过程中，从底向上，如果此时访问的节点不是根节点的话，那么我们可以把这个节点尽量的往上挪一挪，减少数的层数</p>
+</blockquote>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/df8f13d7c2ced300bdc67c6217dd0c64-16755103819311.4q2pe2d7udq0.webp" alt="df8f13d7c2ced300bdc67c6217dd0c64-16755103819311"></p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/3d034fd95fe32082b1a17ff647a1deb6.6u62lryijy80.webp" alt="3d034fd95fe32082b1a17ff647a1deb6"></p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/7b40abb36a561e89f2645faf3825c4ff.6t5u5japcvw0.webp" alt="7b40abb36a561e89f2645faf3825c4ff"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查找过程, 查找元素p所对应的集合编号</span></span><br><span class="line"><span class="comment">// O(h)复杂度, h为树的高度</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span>&#123;</span><br><span class="line">    <span class="keyword">assert</span>( p &gt;= <span class="number">0</span> &amp;&amp; p &lt; count );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// path compression 1</span></span><br><span class="line">    <span class="keyword">while</span>( p != parent[p] )&#123;</span><br><span class="line">        parent[p] = parent[parent[p]];</span><br><span class="line">        p = parent[p];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>上述路径压缩并不是最优的方式，我们可以把最初的树压缩成下图所示，层数是最少的。</p>
+</blockquote>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/3ad8a24fa5ab82d1a9972344d473a754-16654687635695.4pt20ckys1e0.webp" alt="3ad8a24fa5ab82d1a9972344d473a754-16654687635695"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 查找过程, 查找元素p所对应的集合编号</span></span><br><span class="line"><span class="comment">// O(h)复杂度, h为树的高度</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">    <span class="keyword">assert</span> (p &gt;= <span class="number">0</span> &amp;&amp; p &lt; count);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第二种路径压缩算法</span></span><br><span class="line">    <span class="keyword">if</span> (p != parent[p])</span><br><span class="line">        parent[p] = find(parent[p]);</span><br><span class="line">    <span class="keyword">return</span> parent[p];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="最终实现"><a href="#最终实现" class="headerlink" title="最终实现"></a>最终实现</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 基于rank的优化</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnionFind4</span> &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] rank;   <span class="comment">// rank[i]表示以i为根的集合所表示的树的层数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parent; <span class="comment">// parent[i]表示第i个元素所指向的父节点</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;    <span class="comment">// 数据个数</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UnionFind4</span><span class="params">(<span class="type">int</span> count)</span>&#123;</span><br><span class="line">        rank = <span class="keyword">new</span> <span class="title class_">int</span>[count];</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="title class_">int</span>[count];</span><br><span class="line">        <span class="built_in">this</span>.count = count;</span><br><span class="line">        <span class="comment">// 初始化, 每一个parent[i]指向自己, 表示每一个元素自己自成一个集合</span></span><br><span class="line">        <span class="keyword">for</span>( <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span> ; i &lt; count ; i ++ )&#123;</span><br><span class="line">            parent[i] = i;</span><br><span class="line">            rank[i] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 查找过程, 查找元素p所对应的集合编号</span></span><br><span class="line">    <span class="comment">// O(h)复杂度, h为树的高度</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> p)</span>&#123;</span><br><span class="line">        <span class="keyword">assert</span>( p &gt;= <span class="number">0</span> &amp;&amp; p &lt; count );</span><br><span class="line">        <span class="comment">// 不断去查询自己的父亲节点, 直到到达根节点</span></span><br><span class="line">        <span class="comment">// 根节点的特点: parent[p] == p</span></span><br><span class="line">        <span class="keyword">while</span>( p != parent[p] )</span><br><span class="line">            p = parent[p];</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">//第二种路径压缩算法</span></span><br><span class="line">        <span class="comment">//if( p != parent[p] )</span></span><br><span class="line">        <span class="comment">//parent[p] = find( parent[p] );</span></span><br><span class="line">        <span class="comment">//return parent[p];</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 查看元素p和元素q是否所属一个集合</span></span><br><span class="line">    <span class="comment">// O(h)复杂度, h为树的高度</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">( <span class="type">int</span> p , <span class="type">int</span> q )</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 合并元素p和元素q所属的集合</span></span><br><span class="line">    <span class="comment">// O(h)复杂度, h为树的高度</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unionElements</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span>&#123;</span><br><span class="line"> </span><br><span class="line">        <span class="type">int</span> <span class="variable">pRoot</span> <span class="operator">=</span> find(p);</span><br><span class="line">        <span class="type">int</span> <span class="variable">qRoot</span> <span class="operator">=</span> find(q);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span>( pRoot == qRoot )</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span>( rank[pRoot] &lt; rank[qRoot] )&#123;</span><br><span class="line">            parent[pRoot] = qRoot;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>( rank[qRoot] &lt; rank[pRoot])&#123;</span><br><span class="line">            parent[qRoot] = pRoot;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123; <span class="comment">// rank[pRoot] == rank[qRoot]</span></span><br><span class="line">            parent[pRoot] = qRoot;</span><br><span class="line">            rank[qRoot] += <span class="number">1</span>;   <span class="comment">// 维护rank的值</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="板子一"><a href="#板子一" class="headerlink" title="板子一"></a>板子一</h3><p>附并查集相关介绍以及常用模板：</p>
+<p>并查集是一种树形的数据结构，顾名思义，它用于处理一些不交集的合并及查询问题。 它支持两种操作：</p>
+<ol>
+<li><p>查找（Find）：确定某个元素处于哪个子集，单次操作时间复杂度 O(α(n))</p>
+</li>
+<li><p>合并（Union）：将两个子集合并成一个集合，单次操作时间复杂度O(α(n))</p>
+<p>其中 α 为阿克曼函数的反函数，其增长极其缓慢，也就是说其单次操作的平均运行时间可以认为是一个很小的常数。</p>
+</li>
+</ol>
+<p>以下是并查集的常用模板，需要熟练掌握。其中：</p>
+<p>n 表示节点数<br>p 存储每个点的父节点，初始时每个点的父节点都是自己<br>size 只有当节点是祖宗节点时才有意义，表示祖宗节点所在集合中，点的数量<br>find(x) 函数用于查找 x 所在集合的祖宗节点<br>union(a, b) 函数用于合并 a 和b 所在的集合</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] p = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line"><span class="type">int</span>[] size = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">    p[i] = i;</span><br><span class="line">    size[i] = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (p[x] != x) &#123;</span><br><span class="line">        <span class="comment">// 路径压缩</span></span><br><span class="line">        p[x] = find(p[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">pa</span> <span class="operator">=</span> find(a), pb = find(b);</span><br><span class="line">    <span class="keyword">if</span> (pa == pb) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    p[pa] = pb;</span><br><span class="line">    size[pb] += size[pa];</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="板子二"><a href="#板子二" class="headerlink" title="板子二"></a>板子二</h3><p>并查集有三个基本操作：MAKE-SET(x)、UNION(x, y)、FIND-SET(x)</p>
+<ol>
+<li>MAKE-SET(x) : 建立集合，相当于初始化新的元素，每个新元素的根节点一开始都是指向自己的。</li>
+<li>UNION(x, y) : 将包含x，y的两个动态集合合并成一个新的集合。（假定这两个集合在操作之前是不相交的）</li>
+<li>FIND-SET(x) : 返回包含x的集合的代表（根节点）</li>
+</ol>
+<p><code>MAKE-SET(x)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 我这里是定死初始化元素个数n的，可以写成动态集合，每次makeSet就新加入一个元素</span></span><br><span class="line"><span class="type">int</span>[] nodes;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">makeSet</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    nodes = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="comment">// 每个新元素的根节点一开始都是指向自己的</span></span><br><span class="line">        nodes[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>FIND-SET(x)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findSet</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="comment">// 如果此时父节点指向自己，说明已经是根结点了</span></span><br><span class="line">    <span class="keyword">if</span> (nodes[x] == x) <span class="keyword">return</span> x;</span><br><span class="line">    <span class="comment">// 否则，根据父节点继续往上找，直到找到根节点</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> findSet(nodes[x]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>UNION(x, y)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">xRoot</span> <span class="operator">=</span> findSet(x), yRoot = findSet(y);</span><br><span class="line">    <span class="comment">// 找到根节点后，x根做y根的子树，y根做x根的子树都可以</span></span><br><span class="line">    nodes[xRoot] = yRoot; <span class="comment">// nodes[yRoot] = xRoot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>UNION也可以继续一步优化，当两颗树深度不同时，深度小的接到深度比较深的。因为这样不会使得深度加深。这一步也叫路径优化</p>
+<p>那这里可以再有一个数组，用于保存深度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] nodes;</span><br><span class="line"><span class="type">int</span>[] depth;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">makeSet</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.depth = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line">    <span class="built_in">this</span>.nodes = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        nodes[i] = i;</span><br><span class="line">        depth[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">        <span class="comment">// 首先要找到两个结点的根节点（集合代表）</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">xRoot</span> <span class="operator">=</span> findSet(x), yRoot = findSet(y);</span><br><span class="line">        <span class="comment">// 当根节点都相同时，没有必要继续执行合并</span></span><br><span class="line">        <span class="keyword">if</span> (xRoot == yRoot) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// 找到后，如果此时两个结点深度是一致的，则没有要求；否则必须接到深度更深的树上</span></span><br><span class="line">        <span class="keyword">if</span> (depth[xRoot] &lt;= depth[yRoot]) nodes[xRoot] = yRoot;</span><br><span class="line">        <span class="keyword">else</span> nodes[yRoot] = xRoot;</span><br><span class="line">        <span class="comment">// 接完后需要是否深度增加，当且仅当两棵树（且为不同结点）深度一样，深度才会加上</span></span><br><span class="line">        <span class="keyword">if</span> (depth[xRoot] == depth[yRoot]) depth[yRoot]++; <span class="comment">// 因为上面默认深度一样时接到yRoot上，所以是yRoot++</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h5><p>回过头我们再看一下函数FIND-SET，我们要找C的根节点，C先找到B，B再找到A。这样如果这个链路一长，是不是很耗时？<br>那其实我们可以优化直接把C指向A。这一步也叫做路径压缩。（只有在该结点被查找的时候才会压缩）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * FIND-SET(x) : 找到结点x所在集合中的代表（相当于找这棵树的根节点）</span></span><br><span class="line"><span class="comment">     * 所有树高 &lt;= 2 （在union的时候可能到达3）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findSet</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="comment">// 直接把该集合所有节点接到根节点下面, 拍平, 此时树深度为2</span></span><br><span class="line">        <span class="keyword">if</span> (nodes[x] != x)</span><br><span class="line">            nodes[x] = findSet(nodes[x]);</span><br><span class="line">        <span class="keyword">return</span> nodes[x];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">					这步代码也可以优化成一句</span><br><span class="line">                        </span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findSet</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> x == nodes[x] ? x : (nodes[x] = findSet(nodes[x]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>有了路径压缩后，我们的函数UNION就不需要辅助数组了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findSet</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    <span class="comment">// 首先要找到两个结点的根节点（集合代表）</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">xRoot</span> <span class="operator">=</span> findSet(x), yRoot = findSet(y);</span><br><span class="line">    <span class="comment">// 当根节点都相同时，没有必要继续执行合并</span></span><br><span class="line">    <span class="keyword">if</span> (xRoot == yRoot) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">// 有路径压缩后, 不用深度辅助数组, 直接接到根节点上</span></span><br><span class="line">    nodes[xRoot] = yRoot;</span><br><span class="line">    count--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DisjointSet</span> &#123;</span><br><span class="line">    <span class="comment">// 结点信息，node[i]的值表示第 i 个结点的的根结点（集合元素代表）</span></span><br><span class="line">    <span class="type">int</span>[] nodes;</span><br><span class="line">    <span class="comment">// 记录有多少个单独的集合</span></span><br><span class="line">    <span class="type">int</span> count;</span><br><span class="line">    <span class="comment">//使用路径压缩后, 可以不用辅助数组</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化 : 相当于MAKE-SET(x)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DisjointSet</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.count = x;</span><br><span class="line">        <span class="built_in">this</span>.nodes = <span class="keyword">new</span> <span class="title class_">int</span>[x];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; x; i++)</span><br><span class="line">            <span class="comment">// 初始化时，每个结点都是以自己为单个集合（树）</span></span><br><span class="line">            nodes[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * UNION(x, y) : 将两个有关系的集合结点合并成一个新集合，相当于说一棵树接到另一棵树</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">        <span class="comment">// 首先要找到两个结点的根节点（集合代表）</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">xRoot</span> <span class="operator">=</span> findSet(x), yRoot = findSet(y);</span><br><span class="line">        <span class="comment">// 当根节点都相同时，没有必要继续执行合并</span></span><br><span class="line">        <span class="keyword">if</span> (xRoot == yRoot) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// 有路径压缩后, 不用深度辅助数组, 直接接到根节点上</span></span><br><span class="line">        nodes[xRoot] = yRoot;</span><br><span class="line">        count--;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * FIND-SET(x) : 找到结点x所在集合中的代表（相当于找这棵树的根节点）</span></span><br><span class="line"><span class="comment">     * 所有树高 &lt;= 2 （在union的时候可能到达3）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findSet</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="comment">// 直接把该集合所有节点接到根节点下面, 拍平, 此时树深度为2</span></span><br><span class="line">        <span class="keyword">if</span> (nodes[x] != x)</span><br><span class="line">            nodes[x] = findSet(nodes[x]);</span><br><span class="line">        <span class="keyword">return</span> nodes[x];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getCount</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> findSet(x) == findSet(y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">DisjointSet</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] father;</span><br><span class="line"></span><br><span class="line">        DisjointSet(<span class="type">int</span> n) &#123;</span><br><span class="line">            father = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">                father[i] = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="title function_">findRoot</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> father[x] == x ? x : (father[x] = findRoot(father[x]));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">boolean</span> <span class="title function_">merge</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">root_x</span> <span class="operator">=</span> findRoot(x);</span><br><span class="line">            <span class="type">int</span> <span class="variable">root_y</span> <span class="operator">=</span> findRoot(y);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (root_x != root_y) &#123;</span><br><span class="line">                father[root_x] = root_y;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> root_x != root_y;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">validPath</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span>[][] edges, <span class="type">int</span> start, <span class="type">int</span> end)</span> &#123;</span><br><span class="line">        <span class="type">DisjointSet</span> <span class="variable">disj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DisjointSet</span>(n);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 建立连接</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> p : edges) &#123;</span><br><span class="line">            disj.merge(p[<span class="number">0</span>], p[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 合并返回 false 代表它们已经联通</span></span><br><span class="line">        <span class="keyword">return</span> !disj.merge(start, end);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">https:<span class="comment">//leetcode.cn/problems/find-if-path-exists-in-graph/comments/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="板子三"><a href="#板子三" class="headerlink" title="板子三"></a>板子三</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">UnionFind</span> &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="type">int</span>[] parent;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getCount</span><span class="params">()</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> count;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> <span class="title function_">UnionFind</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">          <span class="built_in">this</span>.count = n;</span><br><span class="line">          <span class="built_in">this</span>.parent = <span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line">          <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">              parent[i] = i;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">          <span class="keyword">while</span> (x != parent[x]) &#123;</span><br><span class="line">              parent[x] = parent[parent[x]];</span><br><span class="line">              x = parent[x];</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> x;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">          <span class="type">int</span> <span class="variable">rootX</span> <span class="operator">=</span> find(x);</span><br><span class="line">          <span class="type">int</span> <span class="variable">rootY</span> <span class="operator">=</span> find(y);</span><br><span class="line">          <span class="keyword">if</span> (rootX == rootY) &#123;</span><br><span class="line">              <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          parent[rootX] = rootY;</span><br><span class="line">          count--;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> UnionFind;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> chuancey</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/3/18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnionFind</span> &#123;</span><br><span class="line">     <span class="keyword">private</span> <span class="type">int</span> count; <span class="comment">//记录连通分量</span></span><br><span class="line">     <span class="keyword">private</span> <span class="type">int</span>[]parent; <span class="comment">//节点x的根节点是parent[x]</span></span><br><span class="line">     <span class="keyword">public</span> <span class="title function_">UnionFind</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">         <span class="comment">//一开始互不相通</span></span><br><span class="line">         <span class="built_in">this</span>.count=n;</span><br><span class="line">         <span class="comment">//一开始，每个节点是自己的父节点</span></span><br><span class="line">         parent=<span class="keyword">new</span> <span class="title class_">int</span>[n];</span><br><span class="line">         <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt;n ; i++) &#123;</span><br><span class="line">             parent[i]=i;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">      <span class="comment">/*</span></span><br><span class="line"><span class="comment">      将p和q连接, 如果两个节点被连通，那么则让其中的一个根节点连接到另一个节点的根节点上</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> p,<span class="type">int</span> q)</span>&#123;</span><br><span class="line">         <span class="type">int</span> rootP=find(p);</span><br><span class="line">         <span class="type">int</span> rootQ=find(q);</span><br><span class="line">         <span class="keyword">if</span>(rootP==rootQ)&#123;</span><br><span class="line">             <span class="keyword">return</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">//将两颗树合并为一颗</span></span><br><span class="line">         parent[rootP]=rootQ; <span class="comment">//parent[rootQ]=rootP 效果是一样的</span></span><br><span class="line">         count--; <span class="comment">//两个分量合二为一</span></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">//返回某个节点x的根节点</span></span><br><span class="line">     <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span>&#123;</span><br><span class="line">          <span class="comment">//根节点的parent[x]==x</span></span><br><span class="line">          <span class="keyword">while</span> (parent[x]!=x)&#123;</span><br><span class="line">              x=parent[x];</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> x;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">      判断p和q是否连通:如果两个节点是连通的，那么他们一定拥有相同的根节点</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">     <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">connected</span><span class="params">(<span class="type">int</span> p,<span class="type">int</span> q)</span>&#123;</span><br><span class="line">         <span class="type">int</span> rootP=find(p);</span><br><span class="line">         <span class="type">int</span> rootQ=find(q);</span><br><span class="line">         <span class="keyword">return</span> rootP==rootQ;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">     返回具体有多少个连通分量</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">      <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">count</span><span class="params">()</span>&#123;</span><br><span class="line">         <span class="keyword">return</span> count;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 两种状态压缩的方式没有区别，第一种的时间复杂度在某一篇 paper 里被证明了也是 \alpha 的</p>
+<p> 「每次都只压缩了查询的端点 X 到 parent 吧」这个描述不太准确，事实上是「两步一跳」的路径压缩。「递归」的写法，要先查询到查询结点的根结点，然后再把沿途经过的结点连接到根结点。</p>
+<p> 总结一下：</p>
+<ul>
+<li>循环写法：压缩不彻底，节约了压缩的时间；</li>
+<li>递归写法：压缩彻底，但是压缩也有一定开销。</li>
+</ul>
+<p> 时间复杂度上是一样，测试用例有限没法测试出它们的性能差别。一般用「递归写法」，「循环写法」了解就可以了。</p>
+<p> :link:<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/number-of-provinces/solution/jie-zhe-ge-wen-ti-ke-pu-yi-xia-bing-cha-0unne/">https://leetcode.cn/problems/number-of-provinces/solution/jie-zhe-ge-wen-ti-ke-pu-yi-xia-bing-cha-0unne/</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(x != parent[x])&#123;</span><br><span class="line">                parent[x] = parent[parent[x]];</span><br><span class="line">                x = parent[x];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> x;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> parent[x] == x ? x : (parent[x] = find(parent[x]));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><p>并查集一般有两种优化，这里规范一下表达：</p>
+<ul>
+<li>「路径压缩」：在并查集中查找代表元素时，会将经过的所有元素「直接」连接到代表元素，也就是将连通分量「压扁」。</li>
+<li>「按秩合并」：在并查集中合并两个连通分量时，将「秩」小的连通分量合并到「秩」大的连通分量上面。这里「秩」可以定义为连通分量的大小（包含的节点数量），或者连通分量的高度（连通分量是树的结构，因此可以定义高度。不过在「路径压缩」优化的基础上，这个高度会不断减小，但我们不用去时刻维护它，这样也可以达到最优的时间复杂度是已经被证明的了）。</li>
+</ul>
+<h5 id="一些注解"><a href="#一些注解" class="headerlink" title="一些注解"></a>一些注解</h5><p>在平均情况下，如果不使用「路径压缩」，那么当并查集最后仅包含 1 个连通分量时，它的高度期望为 O(logn)。在此基础上，如果我们使用「按秩合并」优化，就可以保证合并的有序性，是的最坏情况下连通分量的高度也为 O(logn)，即它是非常平衡的。如果我们不使用任何优化，那么最坏情况下会合并成一条链，那么每次查找代表元素就要遍历整条链，时间复杂度即为 O(n)。</p>
+<p>在使用「路径压缩」的情况下，平均时间复杂度都可以达到优秀的 O(α(n))</p>
+<p>那么为什么「路径压缩」的最坏时间复杂度为 O(logn) ？我们可以构造出这个最坏的情况：我们进行 n−1 次合并操作，第 i 次合并（从 1 开始编号）我们合并 i+1 对应的连通分量。对于前者，我们选择连通分量中深度最大的那个节点；对于后者，它的连通分量只包含它本身。由于我们没有「按秩合并」，因此我们选择将前者（大）合并到后者（小）的上面，使得前者中所有的节点的深度都增加1。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">int</span> N = <span class="number">100000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 并查集</span></span><br><span class="line"><span class="type">int</span> parent[N + <span class="number">1</span>];</span><br><span class="line"><span class="comment">// 节点的深度，根节点深度为 0</span></span><br><span class="line"><span class="type">int</span> depth[N + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 记录并查集操作次数</span></span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; N; ++i) &#123;</span><br><span class="line">        <span class="comment">// 合并 1 和 i+1 的连通分量</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算 1~i 每个节点当前的深度</span></span><br><span class="line">        <span class="built_in">memset</span>(depth, <span class="number">-1</span>, <span class="built_in">sizeof</span>(depth));</span><br><span class="line">        depth[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = i - <span class="number">1</span>; j &gt;= <span class="number">1</span>; --j) &#123;</span><br><span class="line">            depth[j] = depth[parent[j]] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 找出 1~i 中深度最大的节点</span></span><br><span class="line">        <span class="type">int</span> u = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">2</span>; j &lt; i; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (depth[j] &gt; depth[u]) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 路径压缩，所有路径上的节点深度变为 1</span></span><br><span class="line">        <span class="keyword">while</span> (u != i) &#123;</span><br><span class="line">            ++count;</span><br><span class="line">            depth[u] = <span class="number">1</span>;</span><br><span class="line">            <span class="type">int</span> p = parent[u];</span><br><span class="line">            parent[u] = i;</span><br><span class="line">            u = p;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将 i 合并到 i+1</span></span><br><span class="line">        ++count;</span><br><span class="line">        parent[i] = i + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// n log n 以 2 为底</span></span><br><span class="line">    <span class="type">double</span> benchmark = N * (<span class="built_in">log</span>(N) / <span class="built_in">log</span>(<span class="number">2</span>));</span><br><span class="line">    cout &lt;&lt; <span class="built_in">setprecision</span>(<span class="number">10</span>) &lt;&lt; count &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; benchmark &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; (count / benchmark) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="最全的板子"><a href="#最全的板子" class="headerlink" title="最全的板子"></a>最全的板子</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UnionFind</span> &#123;</span><br><span class="line">     <span class="keyword">public</span> <span class="type">int</span> count;</span><br><span class="line">     <span class="keyword">public</span> <span class="type">int</span>[] parent;</span><br><span class="line">     <span class="keyword">public</span> <span class="type">int</span>[] size;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">public</span> <span class="title function_">UnionFind</span><span class="params">(<span class="type">int</span> amount)</span> &#123;</span><br><span class="line">         <span class="built_in">this</span>.count = amount;</span><br><span class="line">         parent = <span class="keyword">new</span> <span class="title class_">int</span>[count];</span><br><span class="line">         size = <span class="keyword">new</span> <span class="title class_">int</span>[count];</span><br><span class="line">         <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; count; i++) parent[i] = i;</span><br><span class="line">         Arrays.fill(size, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">find</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">             <span class="keyword">while</span> (parent[x] != x) &#123;</span><br><span class="line">                 parent[x] = parent[parent[x]];</span><br><span class="line">                 x = parent[x];</span><br><span class="line">             &#125;</span><br><span class="line">         <span class="keyword">return</span> x;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">union</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">         <span class="type">int</span> <span class="variable">pRoot</span> <span class="operator">=</span> find(p);</span><br><span class="line">         <span class="type">int</span> <span class="variable">qRoot</span> <span class="operator">=</span> find(q);</span><br><span class="line">         <span class="keyword">if</span>(pRoot == qRoot) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">if</span>(size[pRoot] &gt; size[qRoot]) &#123;</span><br><span class="line">             parent[qRoot] = pRoot;</span><br><span class="line">             size[pRoot] += size[qRoot];</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">             parent[pRoot] = qRoot;</span><br><span class="line">             size[qRoot] += size[pRoot];</span><br><span class="line">         &#125;</span><br><span class="line">         count--;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+            
+        </div>
+        <footer class="article-footer">
+            <a data-url="https://yumubi.github.io/2023/05/22/%E5%B9%B6%E6%9F%A5%E9%9B%86/" data-id="clhya786v000rc8vkgyoqdyj9" data-title="并查集"
+               class="article-share-link">分享</a>
+            
+            
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+        </footer>
+    </div>
+    
+        
+    <nav id="article-nav">
+        
+        
+            <div class="article-nav-link-wrap article-nav-link-right">
+                
+                    
+                    
+                        <img data-src="/covers/wallhaven-2k8mlx_1920x1080.png" data-sizes="auto" alt="idea快捷键" class="lazyload">
+                    
+                
+                <a href="/2023/05/22/idea%E5%BF%AB%E6%8D%B7%E9%94%AE/"></a>
+                <div class="article-nav-caption">后一篇</div>
+                <div class="article-nav-title">
+                    
+                        idea快捷键
+                    
+                </div>
+            </div>
+        
+    </nav>
+
+    
+</article>
+
+</section>
+                
+                    <aside id="sidebar">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="yumubi" class="lazyload">
+            <div class="sidebar-author-name">yumubi</div>
+            <div class="sidebar-description">Eat Goji Berries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%BF%E5%AD%90/">板子</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 10px;">信息论</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a></li></ul>
+        </div>
+    </div>
+
+
+    
+</aside>
+                
+            </div>
+            <footer id="footer">
+    <div class="footer-line"></div>
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            
+            <div>
+                <span class="icon-copyright"></span>
+                2022-2023
+                <span class="footer-info-sep"></span>
+                yumubi
+            </div>
+            
+                <div>
+                    基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+                    Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+                </div>
+            
+            
+                <div>
+                    <span class="icon-brush"></span>
+                    26.6k
+                    &nbsp;|&nbsp;
+                    <span class="icon-coffee"></span>
+                    01:48
+                </div>
+            
+            
+                <div>
+                    <span class="icon-eye"></span>
+                    <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+                    &nbsp;|&nbsp;
+                    <span class="icon-user"></span>
+                    <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+                </div>
+            
+        </div>
+    </div>
+</footer>
+  
+        </div>
+        <nav id="mobile-nav">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="yumubi" class="lazyload">
+            <div class="sidebar-author-name">yumubi</div>
+            <div class="sidebar-description">Eat Goji Berries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">7</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+</nav>
+        
+<script src="https://unpkg.com/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+<script src="https://unpkg.com/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/busuanzi@2.3.0/bsz.pure.mini.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+
+
+
+
+    </div>
+    <div class="site-search">
+        <div class="algolia-popup popup">
+            <div class="algolia-search">
+                <span class="algolia-search-input-icon"></span>
+                <div class="algolia-search-input" id="algolia-search-input"></div>
+            </div>
+
+            <div class="algolia-results">
+                <div id="algolia-stats"></div>
+                <div id="algolia-hits"></div>
+                <div id="algolia-pagination" class="algolia-pagination"></div>
+            </div>
+
+            <span class="popup-btn-close"></span>
+        </div>
+    </div>
+    <!-- hexo injector body_end start -->
+<script src="/js/insertHighlight.js"></script>
+<!-- hexo injector body_end end --></body>
+    </html>
+
