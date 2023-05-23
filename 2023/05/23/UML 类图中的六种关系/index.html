@@ -8,22 +8,33 @@
     
     
     <title>
-        python |
+        UML |
         
         Goji</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="本脚本用于博文名称的格式化,以供主题管理 12345678910111213141516171819202122import datetimeimport osMyDir &#x3D; &amp;#x27;C:\\Blog\\yumubi.github.io\\_posts&amp;#x27;# 获取目录中所有文件的列表files &#x3D; os.listdir(MyDir)prefix &#x3D; datetime.datetime.">
+    <meta name="description" content="UML 类图中的六种关系 Excerpt类之间的关系主要有六种类型：继承、实现&#x2F;实施、组合、聚合、关联和依赖。   六种类关系类之间有六种主要的关系类型：继承、实现&#x2F;实现、组合、聚合、关联和依赖。六种关系的箭头如下： 然后我们来了解类关系的具体内容。  六种关系在六类关系中，组合、聚合、关联三类关系的代码结构与使用属性存储另一个类的引用相同。因此，必须通过内容之间的关系来区分它">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python">
-<meta property="og:url" content="https://yumubi.github.io/2023/05/22/2023-04-15-python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:title" content="UML">
+<meta property="og:url" content="https://yumubi.github.io/2023/05/23/UML%20%E7%B1%BB%E5%9B%BE%E4%B8%AD%E7%9A%84%E5%85%AD%E7%A7%8D%E5%85%B3%E7%B3%BB/index.html">
 <meta property="og:site_name" content="Goji">
-<meta property="og:description" content="本脚本用于博文名称的格式化,以供主题管理 12345678910111213141516171819202122import datetimeimport osMyDir &#x3D; &amp;#x27;C:\\Blog\\yumubi.github.io\\_posts&amp;#x27;# 获取目录中所有文件的列表files &#x3D; os.listdir(MyDir)prefix &#x3D; datetime.datetime.">
+<meta property="og:description" content="UML 类图中的六种关系 Excerpt类之间的关系主要有六种类型：继承、实现&#x2F;实施、组合、聚合、关联和依赖。   六种类关系类之间有六种主要的关系类型：继承、实现&#x2F;实现、组合、聚合、关联和依赖。六种关系的箭头如下： 然后我们来了解类关系的具体内容。  六种关系在六类关系中，组合、聚合、关联三类关系的代码结构与使用属性存储另一个类的引用相同。因此，必须通过内容之间的关系来区分它">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-05-22T02:55:20.387Z">
-<meta property="article:modified_time" content="2023-05-23T05:13:36.817Z">
+<meta property="og:image" content="https://blog.visual-paradigm.com/wp-content/uploads/2022/02/uml-class-diagram-relationships.png">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.61n3c9h1lg00.webp">
+<meta property="og:image" content="https://blog.visual-paradigm.com/wp-content/uploads/2022/10/class-diagram-realization-example.png">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.27bh0mtb9iqs.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6ok7ym0hqms0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6oyauqy09jk0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6mw5owp766k0.webp">
+<meta property="og:image" content="https://blog.visual-paradigm.com/wp-content/uploads/2022/10/uml-class-diagram-example-sales-order-system.png">
+<meta property="og:image" content="https://blog.visual-paradigm.com/wp-content/uploads/2022/10/class-diagram-classes-and-packages-constraints.png">
+<meta property="article:published_time" content="2023-05-23T05:04:12.418Z">
+<meta property="article:modified_time" content="2023-05-23T05:14:36.188Z">
 <meta property="article:author" content="yumubi">
-<meta property="article:tag" content="python">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.visual-paradigm.com/wp-content/uploads/2022/02/uml-class-diagram-relationships.png">
     
         <link rel="alternate" href="/atom.xml" title="Goji" type="application/atom+xml">
     
@@ -54,7 +65,7 @@
         <div id="wrap">
             <header id="header">
     
-        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/451_4K.2qs54rh58gc0.webp" data-sizes="auto" alt="python" class="lazyload">
+        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/banner.57axhcaoefc0.webp" data-sizes="auto" alt="UML" class="lazyload">
     
     <div id="header-outer" class="outer">
         <div id="header-title" class="inner">
@@ -62,7 +73,7 @@
                 
                     
                     
-                        <a href="/" id="logo">python</a>
+                        <a href="/" id="logo">UML</a>
                     
                 
             </h1>
@@ -111,14 +122,14 @@
 </header>
   
             <div id="content" class="outer">
-                <section id="main"><article id="post-2023-04-15-python批量重命名文件" class="h-entry article article-type-post"
+                <section id="main"><article id="post-UML 类图中的六种关系" class="h-entry article article-type-post"
          itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
     <div class="article-inner">
         <div class="article-meta">
             <div class="article-date">
-    <a href="/2023/05/22/2023-04-15-python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" class="article-date-link">
-        <time datetime="2023-05-22T02:55:20.387Z"
-              itemprop="datePublished">2023-05-22</time>
+    <a href="/2023/05/23/UML%20%E7%B1%BB%E5%9B%BE%E4%B8%AD%E7%9A%84%E5%85%AD%E7%A7%8D%E5%85%B3%E7%B3%BB/" class="article-date-link">
+        <time datetime="2023-05-23T05:04:12.418Z"
+              itemprop="datePublished">2023-05-23</time>
     </a>
 </div>
 
@@ -132,24 +143,58 @@
         
         <div class="e-content article-entry" itemprop="articleBody">
             
-                <p>本脚本用于博文名称的格式化,以供主题管理</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">MyDir = <span class="string">&#x27;C:\\Blog\\yumubi.github.io\\_posts&#x27;</span></span><br><span class="line"><span class="comment"># 获取目录中所有文件的列表</span></span><br><span class="line">files = os.listdir(MyDir)</span><br><span class="line"></span><br><span class="line">prefix = datetime.datetime.now().strftime(<span class="string">&#x27;%Y-%m-%d&#x27;</span>)</span><br><span class="line"><span class="comment"># 遍历文件列表，给每个文件重命名</span></span><br><span class="line"><span class="keyword">for</span> i, file <span class="keyword">in</span> <span class="built_in">enumerate</span>(files):</span><br><span class="line">    <span class="keyword">if</span> file.endswith(<span class="string">&#x27;.md&#x27;</span>):</span><br><span class="line">        <span class="comment"># 拼接文件路径和新文件名</span></span><br><span class="line">        idx = file.rfind(<span class="string">&#x27;-&#x27;</span>);</span><br><span class="line">        FileName = file[idx:]</span><br><span class="line">        new_file_name = prefix + FileName</span><br><span class="line">        new_file_path = os.path.join(MyDir, new_file_name)</span><br><span class="line">        <span class="comment"># 如果文件已经存在，则跳过重命名操作</span></span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(new_file_path):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 重命名文件</span></span><br><span class="line">        os.rename(os.path.join(MyDir, file), new_file_path)</span><br></pre></td></tr></table></figure>
-
-
-
-
-<p>本脚本用于博文名称的格式化,以供主题管理</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">MyDir = <span class="string">&#x27;C:\\Blog\\yumubi.github.io\\_posts&#x27;</span></span><br><span class="line"><span class="comment"># 获取目录中所有文件的列表</span></span><br><span class="line">files = os.listdir(MyDir)</span><br><span class="line"></span><br><span class="line">prefix = datetime.datetime.now().strftime(<span class="string">&#x27;%Y-%m-%d&#x27;</span>)</span><br><span class="line"><span class="comment"># 遍历文件列表，给每个文件重命名</span></span><br><span class="line"><span class="keyword">for</span> i, file <span class="keyword">in</span> <span class="built_in">enumerate</span>(files):</span><br><span class="line">    <span class="keyword">if</span> file.endswith(<span class="string">&#x27;.md&#x27;</span>):</span><br><span class="line">        <span class="comment"># 拼接文件路径和新文件名</span></span><br><span class="line">        idx = file.rfind(<span class="string">&#x27;-&#x27;</span>);</span><br><span class="line">        FileName = file[idx:]</span><br><span class="line">        new_file_name = prefix + FileName</span><br><span class="line">        new_file_path = os.path.join(MyDir, new_file_name)</span><br><span class="line">        <span class="comment"># 如果文件已经存在，则跳过重命名操作</span></span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(new_file_path):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 重命名文件</span></span><br><span class="line">        os.rename(os.path.join(MyDir, file), new_file_path)</span><br></pre></td></tr></table></figure>
-
+                <h1 id="UML-类图中的六种关系"><a href="#UML-类图中的六种关系" class="headerlink" title="UML 类图中的六种关系"></a>UML 类图中的六种关系</h1><blockquote>
+<h2 id="Excerpt"><a href="#Excerpt" class="headerlink" title="Excerpt"></a>Excerpt</h2><p>类之间的关系主要有六种类型：继承、实现&#x2F;实施、组合、聚合、关联和依赖。</p>
+</blockquote>
+<hr>
+<h2 id="六种类关系"><a href="#六种类关系" class="headerlink" title="六种类关系"></a>六种类关系</h2><p>类之间有六种主要的关系类型：继承、实现&#x2F;实现、组合、聚合、关联和依赖。六种关系的箭头如下：</p>
+<p>然后我们来了解类关系的具体内容。</p>
+<p><img src="https://blog.visual-paradigm.com/wp-content/uploads/2022/02/uml-class-diagram-relationships.png" alt="UML class diagram relationships"></p>
+<h3 id="六种关系"><a href="#六种关系" class="headerlink" title="六种关系"></a>六种关系</h3><p>在六类关系中，组合、聚合、关联三类关系的代码结构与使用属性存储另一个类的引用相同。因此，必须通过内容之间的关系来区分它们。</p>
+<h3 id="遗产"><a href="#遗产" class="headerlink" title="遗产"></a>遗产</h3><p><strong>继承</strong>也称为<strong>泛化</strong>，用于描述父类和子类之间的关系。父类也称为基类，子类也称为派生类。</p>
+<p>在继承关系中，子类继承父类的所有功能，父类拥有所有的属性、方法和子类。除了与父类相同的信息外，子类还包含其他信息。</p>
+<p>例如：公共汽车、出租车、汽车都是汽车，它们都有名字，都可以在路上。</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.61n3c9h1lg00.webp" alt="image"></p>
+<h3 id="实现-x2F-实施"><a href="#实现-x2F-实施" class="headerlink" title="实现&#x2F;实施"></a>实现&#x2F;实施</h3><p><strong>实现</strong>（Implementation）主要用于指定<strong>接口与实现类之间的关系</strong>。</p>
+<p><strong>接口</strong>（包括<strong>抽象类</strong>）是方法的集合。在实现关系中，一个类实现一个接口，类中的方法实现接口声明的所有方法。</p>
+<p>例如：汽车和船舶都是交通工具，而交通工具只是移动工具的抽象概念，而船舶和交通工具实现了特定的移动功能。</p>
+<p><img src="https://blog.visual-paradigm.com/wp-content/uploads/2022/10/class-diagram-realization-example.png" alt="Class Diagram template: Class Diagram Realization Example (Created by Visual Paradigm Online&#39;s Class Diagram maker)"></p>
+<h3 id="组成关系"><a href="#组成关系" class="headerlink" title="组成关系"></a>组成关系</h3><p>组合关系表示类的整体和部分之间的关系，整体和部分具有一致的生命周期。一旦整体对象不存在，部分对象也就不存在了，它们都会在同一个生命中死去。例如，一个人是由一个头和一个身体组成的。两者密不可分，并存。</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.27bh0mtb9iqs.webp" alt="image"></p>
+<h3 id="聚合关系"><a href="#聚合关系" class="headerlink" title="聚合关系"></a>聚合关系</h3><p>聚合关系也代表了类的整体和部分的关系，成员对象是整体对象的一部分，但成员对象可以独立于整体对象而存在。</p>
+<p>例如，公交车司机和工作服和帽子是整体关系的一部分，但它们可以分开。工作服和帽子可以穿在其他司机身上。公交车司机也可以穿其他工作服和帽子。</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6ok7ym0hqms0.webp" alt="image"></p>
+<h3 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h3><p>关联：表示<strong>一个类的属性持有对另一个类的一个（或多个实例）的引用</strong>。</p>
+<p>关联是类与类之间<strong>最常用</strong>的关系，表示一种对象与另一种对象之间存在联系。<strong>组合和聚合也属于关联关系</strong>，但隶属关系类之间的关系比其他两个弱。</p>
+<p><strong>关联</strong>有四种：<strong>双向关联</strong>、<strong>单向关联</strong>、<strong>自关联</strong>和<strong>多号关联</strong>。</p>
+<p>例如：汽车和司机，一辆车对应一个特定的司机，一个司机可以开多辆汽车。</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6oyauqy09jk0.webp" alt="image"></p>
+<p>在 UML 图中，双向关联可以有<strong>两个箭头</strong>或<strong>没有箭头</strong>，单向关联或自关联有<strong>一个箭头</strong>。</p>
+<p>在多重关系中，您可以直接在关联行中添加一个数字，以表示相应类中的对象数量。</p>
+<ul>
+<li><code>1..1</code>： 只有一个</li>
+<li><code>0..*</code>: 零个或多个</li>
+<li><code>1..*</code>：一个或多个</li>
+<li><code>0..1</code>: 没有或只有一个</li>
+<li><code>m..n</code>: 至少 m，最多 n (m&lt;&#x3D;n)</li>
+</ul>
+<h3 id="依赖项"><a href="#依赖项" class="headerlink" title="依赖项"></a>依赖项</h3><p>依赖：假设A类的变化导致B类的变化，那么说B类依赖于A类。</p>
+<p>在大多数情况下，<strong>依赖关系反映在使用另一个类的对象作为参数的类的方法中</strong>。</p>
+<p>依赖关系是一种“使用”关系。一个特定事物的变化可能会影响其他使用它的事物，并在需要指示一个事物使用另一个事物时使用依赖关系。例如：汽车依赖汽油。如果没有汽油，汽车将无法行驶。</p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.6mw5owp766k0.webp" alt="image"></p>
+<p>下面的类图对来自零售目录的客户订单进行建模。中心类是<strong>Order</strong>。与之相关的是进行购买和<strong>付款的****客户</strong>。<strong>付款</strong>是以下四种之一：现金<strong>、</strong>支票<strong>、</strong>信用卡<strong>或电汇</strong>。订单包含<strong>OrderDetails</strong>（行项目），每个项目都有关联的<strong>Item</strong>。</p>
+<p><img src="https://blog.visual-paradigm.com/wp-content/uploads/2022/10/uml-class-diagram-example-sales-order-system.png" alt="類圖模板：UML 類圖示例：銷售訂單系統（由 Visual Paradigm Online 的類圖製作者創建）"></p>
+<h3 id="具有用户定义约束的类图"><a href="#具有用户定义约束的类图" class="headerlink" title="具有用户定义约束的类图"></a>具有用户定义约束的类图</h3><p><img src="https://blog.visual-paradigm.com/wp-content/uploads/2022/10/class-diagram-classes-and-packages-constraints.png" alt="類圖模板：類圖 - 類和包約束（由 Visual Paradigm Online 的類圖製作者創建）"></p>
+<p>六种关系中，组合、聚合、关联的代码结构是相同的，可以从关系的强弱来理解。从强到弱的顺序是：<strong>继承→实现→组合→聚合→关联→依赖</strong>。</p>
 
             
         </div>
         <footer class="article-footer">
-            <a data-url="https://yumubi.github.io/2023/05/22/2023-04-15-python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" data-id="clhyd5fd800065cvk7ysy58z3" data-title="python"
+            <a data-url="https://yumubi.github.io/2023/05/23/UML%20%E7%B1%BB%E5%9B%BE%E4%B8%AD%E7%9A%84%E5%85%AD%E7%A7%8D%E5%85%B3%E7%B3%BB/" data-id="clhztokwe000060vkg7zxdw7q" data-title="UML"
                class="article-share-link">分享</a>
             
             
-    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
 
         </footer>
     </div>
@@ -157,35 +202,17 @@
         
     <nav id="article-nav">
         
-            <div class="article-nav-link-wrap article-nav-link-left">
-                
-                    
-                    
-                        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/8d4f2816e9087ee743880763c45ac021e3b3b7a9.4l4s3ydjwi00.webp" data-sizes="auto" alt="SpringMVC控制器粗解" class="lazyload">
-                    
-                
-                <a href="/2023/05/22/2023-04-24-%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84Controller%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E5%85%A8%E8%A7%A3/"></a>
-                <div class="article-nav-caption">前一篇</div>
-                <div class="article-nav-title">
-                    
-                        SpringMVC控制器粗解
-                    
-                </div>
-            </div>
-        
         
             <div class="article-nav-link-wrap article-nav-link-right">
                 
-                    
-                    
-                        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/2ac6797bc2a305266408d7e25a408f481b09e036.1schb1xnpou8.jpg" data-sizes="auto" alt="Git指令" class="lazyload">
-                    
+                    <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/453.7jb5ix0637g0.webp" data-sizes="auto" alt="并查集"
+                         class="lazyload">
                 
-                <a href="/2023/05/22/2023-04-15-Git%E6%8C%87%E4%BB%A4/"></a>
+                <a href="/2023/05/22/%E5%B9%B6%E6%9F%A5%E9%9B%86/"></a>
                 <div class="article-nav-caption">后一篇</div>
                 <div class="article-nav-title">
                     
-                        Git指令
+                        并查集
                     
                 </div>
             </div>
