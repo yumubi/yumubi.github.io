@@ -1,0 +1,925 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-CN"
+            
+    >
+    <head>
+    <meta charset="utf-8">
+    
+    
+    <title>
+        组件通信 |
+        
+        Goji&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="父子组件通信1234# 父组件Father.vue│ # 子组件└─Child.vue  常用的方法有：    方案 父组件向子组件 子组件向父组件    props &#x2F; emits props emits   v-model &#x2F; emits v-model emits   ref &#x2F; emits ref emits   provide &#x2F; inject provide inject   Even">
+<meta property="og:type" content="article">
+<meta property="og:title" content="组件通信">
+<meta property="og:url" content="https://yumubi.github.io/2023/06/03/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Vue3/index.html">
+<meta property="og:site_name" content="Goji&#39;s Blog">
+<meta property="og:description" content="父子组件通信1234# 父组件Father.vue│ # 子组件└─Child.vue  常用的方法有：    方案 父组件向子组件 子组件向父组件    props &#x2F; emits props emits   v-model &#x2F; emits v-model emits   ref &#x2F; emits ref emits   provide &#x2F; inject provide inject   Even">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.7em39ocpc7k0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.1fgwu8yzj9eo.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.vwi0yofnixs.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.5qlea41ipxs0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.78mngf46p6o0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.2rvq3qfrfk20.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.h190jfhz08w.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.78t5emxibv40.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.2vjrjve3tey0.webp">
+<meta property="article:published_time" content="2023-06-03T01:14:40.000Z">
+<meta property="article:modified_time" content="2023-06-03T01:22:11.607Z">
+<meta property="article:author" content="Goji">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.7em39ocpc7k0.webp">
+    
+        <link rel="alternate" href="/atom.xml" title="Goji's Blog" type="application/atom+xml">
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    
+    
+        
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui/dist/fancybox.css">
+
+    
+    
+    
+<script src="https://unpkg.com/pace-js@1.2.4/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+  
+    <body>
+    <div id="container">
+        <div id="wrap">
+            <header id="header">
+    
+        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/903656.7j876ndmv4s0.webp" data-sizes="auto" alt="组件通信" class="lazyload">
+    
+    <div id="header-outer" class="outer">
+        <div id="header-title" class="inner">
+            <h1 id="logo-wrap">
+                
+                    
+                    
+                        <a href="/" id="logo">组件通信</a>
+                    
+                
+            </h1>
+            
+                
+                
+            
+        </div>
+        <div id="header-inner">
+            <nav id="main-nav">
+                <a id="main-nav-toggle" class="nav-icon"></a>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/">首页</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/archives">归档</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/about">关于</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/friend">友链</a>
+                    </span>
+                
+            </nav>
+            <nav id="sub-nav">
+                
+                    <a id="nav-rss-link" class="nav-icon" href="/atom.xml"
+                       title="RSS 订阅"></a>
+                
+                
+            </nav>
+            <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yumubi.github.io"></form>
+            </div>
+        </div>
+    </div>
+</header>
+  
+            <div id="content" class="outer">
+                <section id="main"><article id="post-深入理解Vue3" class="h-entry article article-type-post"
+         itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="article-inner">
+        <div class="article-meta">
+            <div class="article-date">
+    <a href="/2023/06/03/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Vue3/" class="article-date-link">
+        <time datetime="2023-06-03T01:14:40.000Z"
+              itemprop="datePublished">2023-06-03</time>
+    </a>
+</div>
+
+            
+    <div class="article-category">
+        <a class="article-category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+        </div>
+        <div class="hr-line"></div>
+        
+        <div class="e-content article-entry" itemprop="articleBody">
+            
+                <h1 id="父子组件通信"><a href="#父子组件通信" class="headerlink" title="父子组件通信"></a>父子组件通信</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 父组件</span><br><span class="line">Father.vue</span><br><span class="line">│ # 子组件</span><br><span class="line">└─Child.vue</span><br></pre></td></tr></table></figure>
+
+<p>常用的方法有：</p>
+<table>
+<thead>
+<tr>
+<th align="left">方案</th>
+<th align="left">父组件向子组件</th>
+<th align="left">子组件向父组件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>props / emits</code></td>
+<td align="left">props</td>
+<td align="left">emits</td>
+</tr>
+<tr>
+<td align="left"><code>v-model / emits</code></td>
+<td align="left">v-model</td>
+<td align="left">emits</td>
+</tr>
+<tr>
+<td align="left"><code>ref / emits</code></td>
+<td align="left">ref</td>
+<td align="left">emits</td>
+</tr>
+<tr>
+<td align="left"><code>provide / inject</code></td>
+<td align="left">provide</td>
+<td align="left">inject</td>
+</tr>
+<tr>
+<td align="left"><code>EventBus</code></td>
+<td align="left">emit &#x2F; on</td>
+<td align="left">emit &#x2F; on</td>
+</tr>
+<tr>
+<td align="left"><code>Reative State</code></td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left"><code>Vuex</code></td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left"><code>Pinia</code></td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+</tbody></table>
+<h2 id="props-x2F-emits"><a href="#props-x2F-emits" class="headerlink" title="props &#x2F; emits"></a>props &#x2F; emits</h2><p>这是 Vue 跨组件通信最常用，也是基础的一个方案，它的通信过程是：</p>
+<ol>
+<li>父组件 Father.vue 通过 props 向子组件 Child.vue 传值</li>
+<li>子组件 Child.vue 则可以通过 emits 向父组件 Father.vue 发起事件通知</li>
+</ol>
+<p>最常见的场景就是统一在父组件发起 AJAX 请求，拿到数据后，再根据子组件的渲染需要传递不同的 props 给不同的子组件使用。</p>
+<h3 id="下发-props"><a href="#下发-props" class="headerlink" title="下发 props"></a>下发 props</h3><p>下发的过程是在 Father.vue 里完成的，父组件在向子组件下发 props 之前，需要导入子组件并启用它作为自身的模板，然后在 <code>setup</code> 里处理好数据并 return 给 <code>&lt;template /&gt;</code> 用。</p>
+<p>在 Father.vue 的 <code>&lt;script /&gt;</code> 里：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Father.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&#x27;@cp/Child.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Member</span> &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="comment">// 需要启用子组件作为模板</span></span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    <span class="title class_">Child</span>,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 定义一些数据并 `return` 给 `&lt;template /&gt;` 用</span></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">userInfo</span>: <span class="title class_">Member</span> = &#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Petter&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 不要忘记 `return` ，否则 `&lt;template /&gt;` 拿不到数据</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      userInfo,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>然后在 Father.vue 的 <code>&lt;template /&gt;</code> 这边拿到 return 出来的数据，把要传递的数据通过属性的方式绑定在组件标签上。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">title</span>=<span class="string">&quot;用户信息&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:index</span>=<span class="string">&quot;1&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:uid</span>=<span class="string">&quot;userInfo.id&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:user-name</span>=<span class="string">&quot;userInfo.name&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这样就完成了 props 数据的下发。</p>
+<p>在 <code>&lt;template /&gt;</code> 绑定属性这里，如果是普通的字符串，比如上面的 <code>title</code>，则直接给属性名赋值就可以。</p>
+<p>如果是变量名，或者其他类型如 <code>number</code> 、 <code>boolean</code> 等，比如上面的 <code>index</code>，则需要通过属性动态绑定的方式来添加，使用 <code>v-bind:</code> 或者 <code>:</code> 符号进行绑定。</p>
+<p>另外官方文档推荐对 camelCase 风格（小驼峰）命名的 props ，在绑定时使用和 HTML attribute 一样的 kebab-case 风格（短横线），例如使用 <code>user-name</code> 代替 <code>userName</code> 传递，</p>
+<h3 id="接收-props"><a href="#接收-props" class="headerlink" title="接收 props"></a>接收 props</h3><p>接收的过程是在 Child.vue 里完成的，在 <code>&lt;script /&gt;</code> 部分，子组件通过与 <code>setup</code> 同级的 props 来接收数据。</p>
+<p>它可以是一个 <code>string[]</code> 数组，把要接受的变量名放到这个数组里，直接放进来作为数组的 <code>item</code> ：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">props</span>: [<span class="string">&#x27;title&#x27;</span>, <span class="string">&#x27;index&#x27;</span>, <span class="string">&#x27;userName&#x27;</span>, <span class="string">&#x27;uid&#x27;</span>],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>和 TypeScript 一样，类型限制可以为程序带来更好的健壮性， Vue 的 props 也支持增加类型限制。</p>
+<p>相对于传递一个 <code>string[]</code> 类型的数组，更推荐的方式是把 props 定义为一个对象，以对象形式列出，每个 Property 的名称和值分别是各自的名称和类型，只有合法的类型才允许传入。</p>
+<p>给 props 加上类型限制：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">props</span>: &#123;</span><br><span class="line">    <span class="attr">title</span>: <span class="title class_">String</span>,</span><br><span class="line">    <span class="attr">index</span>: <span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">userName</span>: <span class="title class_">String</span>,</span><br><span class="line">    <span class="attr">uid</span>: <span class="title class_">Number</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>现在如果传入不正确的类型，程序就会抛出警告信息，告知开发者必须正确传值。</p>
+<p>如果需要对某个 Prop 允许多类型，比如这个 <code>uid</code> 字段，可能是数值，也可能是字符串，那么可以在类型这里，使用一个数组，把允许的类型都加进去。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">props</span>: &#123;</span><br><span class="line">    <span class="comment">// 单类型</span></span><br><span class="line">    <span class="attr">title</span>: <span class="title class_">String</span>,</span><br><span class="line">    <span class="attr">index</span>: <span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">userName</span>: <span class="title class_">String</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里使用了多种类型</span></span><br><span class="line">    <span class="attr">uid</span>: [<span class="title class_">Number</span>, <span class="title class_">String</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="可选以及带有默认值的-props"><a href="#可选以及带有默认值的-props" class="headerlink" title="可选以及带有默认值的 props"></a>可选以及带有默认值的 props</h3><p>所有 props 默认都是可选的，如果不传递具体的值，则默认值都是 <code>undefined</code> ，可能引起程序运行崩溃， Vue 支持对可选的 props 设置默认值，也是通过对象的形式配置 props 的选项。</p>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">类型</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">type</td>
+<td align="left">string</td>
+<td align="left">类型</td>
+</tr>
+<tr>
+<td align="left">required</td>
+<td align="left">boolean</td>
+<td align="left">是否必传， <code>true</code> 代表必传， <code>false</code> 代表可选</td>
+</tr>
+<tr>
+<td align="left">default</td>
+<td align="left">any</td>
+<td align="left">与 <code>type</code> 选项的类型相对应的默认值，如果 <code>required</code> 选项是 <code>false</code> ，但这里不设置默认值，则会默认为 <code>undefined</code></td>
+</tr>
+<tr>
+<td align="left">validator</td>
+<td align="left">function</td>
+<td align="left">自定义验证函数，需要 return 一个布尔值， <code>true</code> 代表校验通过， <code>false</code> 代表校验不通过，当校验不通过时，控制台会抛出警告信息</td>
+</tr>
+</tbody></table>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">props</span>: &#123;</span><br><span class="line">    <span class="comment">// 可选，并提供默认值</span></span><br><span class="line">    <span class="attr">title</span>: &#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">String</span>,</span><br><span class="line">      <span class="attr">required</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">default</span>: <span class="string">&#x27;默认标题&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 默认可选，单类型</span></span><br><span class="line">    <span class="attr">index</span>: <span class="title class_">Number</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加一些自定义校验</span></span><br><span class="line">    <span class="attr">userName</span>: &#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">String</span>,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 在这里校验用户名必须至少 3 个字</span></span><br><span class="line">      <span class="attr">validator</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> v.<span class="property">length</span> &gt;= <span class="number">3</span>,</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 默认可选，但允许多种类型</span></span><br><span class="line">    <span class="attr">uid</span>: [<span class="title class_">Number</span>, <span class="title class_">String</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-props"><a href="#使用-props" class="headerlink" title="使用 props"></a>使用 props</h3><p>在 <code>&lt;template /&gt;</code> 部分，比如要渲染父组件传入的 props ：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>标题：&#123;&#123; title &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>索引：&#123;&#123; index &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>用户id：&#123;&#123; uid &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>用户名：&#123;&#123; userName &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">props</span>: &#123;</span><br><span class="line">    <span class="attr">title</span>: <span class="title class_">String</span>,</span><br><span class="line">    <span class="attr">index</span>: <span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">userName</span>: <span class="title class_">String</span>,</span><br><span class="line">    <span class="attr">uid</span>: <span class="title class_">Number</span>,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在这里需要添加一个入参</span></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params">props</span>) &#123;</span><br><span class="line">    <span class="comment">// 该入参包含了当前组件定义的所有 props</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(props)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>关于 Setup 函数的第一个入参 <code>props</code> ：</p>
+<ol>
+<li><p>该入参包含了当前组件定义的所有 props （如果父组件 Father.vue 传进来的数据在 Child.vue 里未定义，不仅不会拿到，并且在控制台会有警告信息）。</p>
+</li>
+<li><p>该入参可以随意命名，比如可以写成一个下划线 <code>_</code> ，通过 <code>_.uid</code> 也可以拿到数据，但是语义化命名是一个良好的编程习惯。</p>
+</li>
+<li><p><font color=#39c5bb>该入参具备响应性，父组件修改了传递下来的值，子组件也会同步得到更新，因此请不要直接解构，可以通过<code>toRef</code>或者<code>toRefs</code>API 转换为响应式变量</font></p>
+<h3 id="传递非-props-的属性"><a href="#传递非-props-的属性" class="headerlink" title="传递非 props 的属性"></a><strong>传递非 props 的属性</strong></h3></li>
+</ol>
+<blockquote>
+<p>如果父组件 Father.vue 传进来的数据在 Child.vue 里未定义，不仅不会拿到，并且在控制台会有警告信息。</p>
+</blockquote>
+<p>这种情况虽然无法从 props 里拿到对应的数据，但也不意味着不能传递任何未定义的属性数据，在父组件，除了可以给子组件绑定 props ，还可以根据实际需要去绑定一些特殊的属性。</p>
+<p>比如给子组件设置 <code>class</code>、<code>id</code>，或者 <code>data-xxx</code> 之类的一些自定义属性，如果子组件 Child.vue 的 <code>&lt;template /&gt;</code> 里只有一个根节点，那么这些属性默认会自动继承并渲染在 Node 节点上。</p>
+<p>假设当前在子组件 Child.vue 是如下这样只有一个根节点，并且未接收任何 props ：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span>&gt;</span>子组件<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span> &#123;&#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"><span class="selector-class">.child</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="attribute">width</span>: <span class="number">100%</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">&#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在 Father.vue 里对 Child.vue 传递了多个属性：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">id</span>=<span class="string">&quot;child-component&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">class</span>=<span class="string">&quot;class-name-from-father&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:keys</span>=<span class="string">&quot;[&#x27;foo&#x27;, &#x27;bar&#x27;]&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:obj</span>=<span class="string">&quot;&#123; foo: &#x27;bar&#x27; &#125;&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">data-hash</span>=<span class="string">&quot;b10a8db164e0754105b7a99be72e3fe5&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>回到浏览器，通过 Chrome 的审查元素可以看到子组件 Child.vue 在渲染后，按照 HTML 属性的渲染规则生成了多个属性：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> 在浏览器里渲染后的 <span class="variable constant_">HTML</span> <span class="variable constant_">DOM</span> 结构 --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">div</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">class</span>=<span class="string">&quot;child class-name-from-father&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">id</span>=<span class="string">&quot;child-component&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">keys</span>=<span class="string">&quot;foo,bar&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">obj</span>=<span class="string">&quot;[object Object]&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">data-hash</span>=<span class="string">&quot;b10a8db164e0754105b7a99be72e3fe5&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">data-v-2dcc19c8</span>=<span class="string">&quot;&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  <span class="attr">data-v-7eb2bc79</span>=<span class="string">&quot;&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">&gt;</span></span></span><br><span class="line"><span class="language-xml">  子组件</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>其中有两个以 <code>data-v-</code> 开头的属性是 <code>&lt;style /&gt;</code> 标签开启了 Style Scoped功能自动生成的 Hash 值。</p>
+</blockquote>
+<p>可以在 Child.vue 配置 <code>inheritAttrs</code> 为 <code>false</code> 来屏蔽这些非 props 属性的渲染。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">inheritAttrs</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果你使用了 <code>&lt;script setup&gt;</code>，你需要一个额外的 <code>&lt;script&gt;</code> 块来书写这个选项声明：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">// 使用普通的 &lt;script&gt; 来声明选项</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line"><span class="attr">inheritAttrs</span>: <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="comment">// ...setup 部分逻辑</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>关闭了 之后，现在的 DOM 结构如下，只保留了两个由 Style Scoped 生成的 Hash 值：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> 在浏览器里渲染后的 <span class="variable constant_">HTML</span> <span class="variable constant_">DOM</span> 解构 --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span> <span class="attr">data-v-2dcc19c8</span>=<span class="string">&quot;&quot;</span> <span class="attr">data-v-7eb2bc79</span>=<span class="string">&quot;&quot;</span>&gt;</span>子组件<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这一类非 props 属性通常称之为 attrs 。</p>
+<blockquote>
+<p><del>开发者可能容易混淆这两者，确实是非常接近，都是由父组件传递，由子组件接收，支持传递的数据类型也一样，但为什么一部分是在 props 获取，一部分在 attrs 获取呢？根据它们的缩写，其实是可以知道 Prop 是指 Property ，而 Attr 是指 Attribute ，虽然都是 “属性” ，但 Property 更接近于事物本身的属性，因此需要在组件里声明，而 Attribute 更偏向于赋予的属性，因此用于指代父组件传递的其他未被声明为 Property 的属性。</del></p>
+</blockquote>
+<h3 id="获取非-props-的属性"><a href="#获取非-props-的属性" class="headerlink" title="获取非 props 的属性"></a>获取非 props 的属性</h3><p> 在父组件 Father.vue 里向子组件 Child.vue 传递了一些 attrs 自定义属性，在子组件里想要拿到这些属性，使用原生 JavaScript 操作是需要通过 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getAttribute">Element.getAttribute()</a> 方法，但 Vue 提供了更简单的操作方式。</p>
+<p>在 Child.vue 里，可以通过 <code>setup</code> 的第二个参数 <code>context</code> 里的 <code>attrs</code> 来获取到这些属性，并且父组件传递了什么类型的值，获取到的也是一样的类型，这一点和使用 <code>Element.getAttribute()</code> 完全不同。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params">props, &#123; attrs &#125;</span>) &#123;</span><br><span class="line">    <span class="comment">// `attrs` 是个对象，每个 Attribute 都是它的 `key`</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(attrs.<span class="property">id</span>) <span class="comment">// child-component</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(attrs.<span class="property">class</span>) <span class="comment">// class-name-from-father</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 传递数组会被保留类型，不会被转换为 `key1,key2` 这样的字符串</span></span><br><span class="line">    <span class="comment">// 这一点与 `Element.getAttribute()` 完全不同</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(attrs.<span class="property">keys</span>) <span class="comment">// [&#x27;foo&#x27;, &#x27;bar&#x27;]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 传递对象也可以正常获取</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(attrs.<span class="property">obj</span>) <span class="comment">// &#123;foo: &#x27;bar&#x27;&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果传下来的 Attribute 带有短横线，需要通过这种方式获取</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(attrs[<span class="string">&#x27;data-hash&#x27;</span>]) <span class="comment">// b10a8db164e0754105b7a99be72e3fe5</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">如果需要，你可以在 &lt;script setup&gt; 中使用 <span class="title function_">useAttrs</span>() <span class="variable constant_">API</span> 来访问一个组件的所有透传 attribute：</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; useAttrs &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> attrs = <span class="title function_">useAttrs</span>()</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>子组件不论是否设置 <code>inheritAttrs</code> 属性，都可以通过 <code>attrs</code> 拿到父组件传递下来的数据，但是如果要使用 <code>Element.getAttribute()</code> 则只有当 <code>inheritAttrs</code> 为 <code>true</code> 的时候才可以，因为此时在 DOM 上才会渲染这些属性。</p>
+</blockquote>
+<p>和单根节点组件有所不同，有着多个根节点的组件没有自动 attribute 透传行为，需要在子组件 Child.vue 里通过 <code>v-bind</code> 绑定到要继承在节点上。</p>
+<p>可以通过 Vue 实例属性 <code>$attrs</code> 或者从 setup 函数里把 <code>attrs</code> return 出来使用。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="comment">&lt;!-- 默认不会继承属性 --&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span>&gt;</span>不会继承<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">  <span class="comment">&lt;!-- 绑定后可继承， `$attrs` 是一个 Vue 提供的实例属性 --&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span> <span class="attr">v-bind</span>=<span class="string">&quot;$attrs&quot;</span>&gt;</span>使用 $attrs 继承<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">  <span class="comment">&lt;!-- 绑定后可继承， `attrs` 是从 `setup` 里 `return` 出来的变量 --&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span> <span class="attr">v-bind</span>=<span class="string">&quot;attrs&quot;</span>&gt;</span>使用 attrs 继承<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="title function_">setup</span>(<span class="params">props, &#123; attrs &#125;</span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      attrs,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="绑定-emits"><a href="#绑定-emits" class="headerlink" title="绑定 emits"></a>绑定 emits</h3><p>如果父组件 Father.vue 需要获取子组件 Child.vue 的数据更新情况，可以由子组件通过 emits 进行通知</p>
+<p>事件的逻辑是由父组件决定的，因此需要在父组件 Father.vue 的 <code>&lt;script /&gt;</code> 里先声明数据变量和一个更新函数，并且这个更新函数通常会有一个入参作为数据的新值接收。</p>
+<p>在本例子里，父组件声明了一个 <code>updateAge</code> 方法，它接受一个入参 <code>newAge</code> ，代表新的年龄数据，这个入参的值将由子组件 Child.vue 在触发 emits 时传入。</p>
+<p>因为还需要在 <code>&lt;template /&gt;</code> 部分绑定给子组件，所以请记得 return 出来。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Father.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&#x27;@cp/Child.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Member</span> &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">age</span>: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    <span class="title class_">Child</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">userInfo</span>: <span class="title class_">Member</span> = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Petter&#x27;</span>,</span><br><span class="line">      <span class="attr">age</span>: <span class="number">0</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 声明一个更新年龄的方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> <span class="variable">newAge</span> - 新的年龄，由子组件触发 emits 时传递</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">updateAge</span>(<span class="params">newAge: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">      userInfo.<span class="property">age</span> = newAge</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      userInfo,</span><br><span class="line">      updateAge,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><font color=##ebcb8b>自定义的 emits 事件也是通过 <code>v-on</code> 或者是 <code>@</code> 来绑定：</font></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span> @<span class="attr">update-age</span>=<span class="string">&quot;updateAge&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>和 props 一样，官方文档也推荐将 camelCase 风格（小驼峰）命名的函数，在绑定时使用 kebab-case 风格（短横线），例如使用 <code>update-age</code> 代替 <code>updateAge</code> </p>
+<h3 id="收并调用-emits"><a href="#收并调用-emits" class="headerlink" title="收并调用 emits"></a>收并调用 emits</h3><p>和 props 一样，可以指定是一个数组，把要接收的 <code>emit</code> 事件名称写进去：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">emits</span>: [<span class="string">&#x27;update-age&#x27;</span>],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>和 props 不同，通常情况下 emits 这样配置就足够使用了。</p>
+<p>接下来如果子组件需要更新数据并通知父组件，可以使用 <code>setup</code> 第二个参数 <code>context</code> 里的 <code>emit</code> 方法触发：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">emits</span>: [<span class="string">&#x27;update-age&#x27;</span>],</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params">props, &#123; emit &#125;</span>) &#123;</span><br><span class="line">    <span class="comment">// 通知父组件将年龄设置为 `2`</span></span><br><span class="line">    <span class="title function_">emit</span>(<span class="string">&#x27;update-age&#x27;</span>, <span class="number">2</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><code>emit</code> 方法最少要传递一个参数：事件名称。</p>
+<p>事件名称是指父组件 Father.vue 绑定事件时 <code>@update-age=&quot;updateAge&quot;</code> 里的 <code>update-age</code> ，如果改成 <code>@hello=&quot;updateAge&quot;</code> ，那么事件名称就需要使用 <code>hello</code> ，一般情况下事件名称和更新函数的名称会保持一致，方便维护。</p>
+<p>对于需要更新数据的情况， <code>emit</code> 还支持传递更多的参数，对应更新函数里的入参，所以可以看到上面例子里的 <code>emit(&#39;update-age&#39;, 2)</code> 有第二个参数，传递了一个 <code>2</code> 的数值，就是作为父组件 <code>updateAge</code> 的入参 <code>newAge</code> 传递。</p>
+<p>如果需要通信的数据很多，建议第二个入参使用一个对象来管理数据，例如父组件调整为：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Father.vue</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">updateInfo</span>(<span class="params">&#123; name, age &#125;: Member</span>) &#123;</span><br><span class="line">  <span class="comment">// 当 `name` 变化时更新 `name` 的值</span></span><br><span class="line">  <span class="keyword">if</span> (name &amp;&amp; name !== userInfo.<span class="property">name</span>) &#123;</span><br><span class="line">    userInfo.<span class="property">name</span> = name</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 当 `age` 变化并且新值在正确的范围内时，更新 `age` 的值</span></span><br><span class="line">  <span class="keyword">if</span> (age &gt; <span class="number">0</span> &amp;&amp; age !== userInfo.<span class="property">age</span>) &#123;</span><br><span class="line">    userInfo.<span class="property">age</span> = age</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>子组件在传递新数据时，就应该使用对象的形式传递：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="title function_">emit</span>(<span class="string">&#x27;update-info&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;Tom&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><font color=##42b883><code>defineEmits()</code> 会返回一个函数供我们使用：</font></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line"><span class="keyword">const</span> e = <span class="title function_">defineEmits</span>([<span class="string">&#x27;update-age&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="built_in">setInterval</span>(<span class="function">()=&gt;</span> &#123;</span><br><span class="line"> <span class="title function_">e</span>(<span class="string">&#x27;update-age&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>只不过我们一般这个函数取名为emit,事实上自定义也是可以的</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line"><span class="keyword">const</span> emit = <span class="title function_">defineEmits</span>([<span class="string">&#x27;inFocus&#x27;</span>, <span class="string">&#x27;submit&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">buttonClick</span>(<span class="params"></span>) &#123;</span><br><span class="line"><span class="title function_">emit</span>(<span class="string">&#x27;submit&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+<h2 id="v-model-x2F-emits"><a href="#v-model-x2F-emits" class="headerlink" title="v-model &#x2F; emits"></a>v-model &#x2F; emits</h2><ol>
+<li>在 Father.vue ，通过 v-model 向 Child.vue 传值</li>
+<li>Child.vue 通过自身设定的 emits 向 Father.vue 通知数据更新</li>
+</ol>
+<p>v-model 的用法和 props 非常相似，但是很多操作上更为简化，但操作简单带来的 “副作用” ，就是功能上也没有 props 那么多。</p>
+<h3 id="绑定-v-model"><a href="#绑定-v-model" class="headerlink" title="绑定 v-model"></a>绑定 v-model</h3><p>和下发 props 的方式类似，都是在子组件上绑定 Father.vue 定义好的数据，这是绑定一个数据的例子：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span> <span class="attr">v-model:username</span>=<span class="string">&quot;userInfo.name&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>如果要绑定多个数据，写多个 v-model 即可：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">v-model:uid</span>=<span class="string">&quot;userInfo.id&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">v-model:username</span>=<span class="string">&quot;userInfo.name&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">v-model:age</span>=<span class="string">&quot;userInfo.age&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>一个 v-model 其实就是一个 prop ，它支持的数据类型和 prop 是一样的，所以子组件在接收数据的时候，完全按照 props 去定义就可以了。</p>
+<h3 id="配置-emits"><a href="#配置-emits" class="headerlink" title="配置 emits"></a>配置 emits</h3><p>使用 props &#x2F; emits ，如果要更新父组件的数据，还需要在父组件声明一个更新函数并绑定事件给子组件，才能够更新。</p>
+<p>而使用 v-model &#x2F; emits ，无需在父组件声明更新函数，只需要在子组件 Child.vue 里通过 <code>update:</code> 前缀加上 v-model 的属性名这样的格式，即可直接定义一个更新事件。</p>
+<p>这里的 update 后面的属性名，支持驼峰写法</p>
+<p>在 Child.vue 配置好 emits 之后，就可以在 <code>setup</code> 里直接操作数据的更新了：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> 在浏览器里渲染后的 <span class="variable constant_">HTML</span> <span class="variable constant_">DOM</span> 结构 --&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    子组件</span></span><br><span class="line"><span class="language-xml">    成功接收&#123;&#123; props &#125;&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">const</span> props = <span class="title function_">defineProps</span>([<span class="string">&#x27;uid&#x27;</span>, <span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;age&#x27;</span>])</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">const</span> e = <span class="title function_">defineEmits</span>([<span class="string">&#x27;update:uid&#x27;</span>, <span class="string">&#x27;update:username&#x27;</span>, <span class="string">&#x27;update:age&#x27;</span>])</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="title function_">e</span>(<span class="string">&#x27;update:username&#x27;</span>, props.<span class="property">username</span> === <span class="string">&#x27;Tom&#x27;</span> ? <span class="string">&#x27;Peter&#x27;</span> : <span class="string">&#x27;Tom&#x27;</span>)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="title function_">e</span>(<span class="string">&#x27;update:uid&#x27;</span>, <span class="title class_">Math</span>.<span class="title function_">random</span>())</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="title function_">e</span>(<span class="string">&#x27;update:age&#x27;</span>, props.<span class="property">age</span> + <span class="number">1</span>)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;, <span class="number">1000</span>)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params">props, &#123; emit &#125;</span>) &#123;</span><br><span class="line">    <span class="comment">// 2s 后更新用户名</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">emit</span>(<span class="string">&#x27;update:username&#x27;</span>, <span class="string">&#x27;Tom&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">2000</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="ref-x2F-emits"><a href="#ref-x2F-emits" class="headerlink" title="ref &#x2F; emits"></a>ref &#x2F; emits</h2><h3 id="父组件操作子组件"><a href="#父组件操作子组件" class="headerlink" title="父组件操作子组件"></a>父组件操作子组件</h3><p>父组件可以给子组件绑定 <code>ref</code> 属性，然后通过 Ref 变量操作子组件的数据或者调用子组件里面的方法。</p>
+<p>先在 <code>&lt;template /&gt;</code> 处给子组件标签绑定 <code>ref</code> 属性：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span> <span class="attr">ref</span>=<span class="string">&quot;child&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>&lt;script /&gt;</code> 部分定义好对应的变量名称 <code>child</code> ，即可通过该变量操作子组件上的变量或方法</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Father.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, onMounted, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&#x27;@cp/Child.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    <span class="title class_">Child</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 给子组件定义一个 `ref` 变量</span></span><br><span class="line">    <span class="keyword">const</span> child = ref&lt;<span class="title class_">InstanceType</span>&lt;<span class="keyword">typeof</span> <span class="title class_">Child</span>&gt;&gt;()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 请保证视图渲染完毕后再执行操作</span></span><br><span class="line">    <span class="title function_">onMounted</span>(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 执行子组件里面的 AJAX 请求函数</span></span><br><span class="line">      <span class="keyword">await</span> child.<span class="property">value</span>!.<span class="title function_">queryList</span>()</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 显示子组件里面的弹窗</span></span><br><span class="line">      child.<span class="property">value</span>!.<span class="property">isShowDialog</span> = <span class="literal">true</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 必须 `return` 出去才可以给到 `&lt;template /&gt;` 使用</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      child,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，在子组件 Child.vue 里，变量和方法也需要在 <code>setup</code> 里 return 出来才可以被父组件调用到。</p>
+<h3 id="子组件通知父组件"><a href="#子组件通知父组件" class="headerlink" title="子组件通知父组件"></a>子组件通知父组件</h3><p>子组件如果想主动向父组件通讯，也需要使用 emits,用法同上</p>
+<h2 id="爷孙组件通信"><a href="#爷孙组件通信" class="headerlink" title="爷孙组件通信"></a>爷孙组件通信</h2><p>C 组件被引入到 B 组件里， B 组件又被引入到 A 组件里渲染，此时 A 是 C 的爷爷级别（可能还有更多层级关系），它们之间的关系可以假设如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Grandfather.vue</span><br><span class="line">└─Son.vue</span><br><span class="line">  └─Grandson.vue</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 Grandson.vue 并非直接挂载在 Grandfather.vue 下面，他们之间还隔着至少一个 Son.vue （在实际业务中可能存在更多层级），如果使用 props ，只能一级组件一级组件传递下去，就太繁琐了。</p>
+<p>更直接的通信方式实现 C 和 A 之间的数据传递，常用的方法有：</p>
+<table>
+<thead>
+<tr>
+<th align="left">方案</th>
+<th align="left">爷组件向孙组件</th>
+<th align="left">孙组件向爷组件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">provide &#x2F; inject</td>
+<td align="left">provide</td>
+<td align="left">inject</td>
+</tr>
+<tr>
+<td align="left">EventBus</td>
+<td align="left">emit &#x2F; on</td>
+<td align="left">emit &#x2F; on</td>
+</tr>
+<tr>
+<td align="left">Reative State</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">Vuex</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">Pinia</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+</tbody></table>
+<h2 id="provide-x2F-inject"><a href="#provide-x2F-inject" class="headerlink" title="provide &#x2F; inject"></a>provide &#x2F; inject</h2><p>这个通信方式也是有两部分：</p>
+<ol>
+<li>Grandfather.vue 通过 provide 向孙组件 Grandson.vue 提供数据和方法</li>
+<li>Grandson.vue 通过 inject 注入爷爷组件 Grandfather.vue 的数据和方法</li>
+</ol>
+<p>无论组件层次结构有多深，发起 provide 的组件都可以作为其所有下级组件的依赖提供者。</p>
+<blockquote>
+<p> <font color=##c3e88d>切记一点就是： provide 和 inject 绑定并不是可响应的，这是刻意为之的，除非传入了一个可侦听的对象。</font></p>
+</blockquote>
+<h3 id="发起-provide"><a href="#发起-provide" class="headerlink" title="发起 provide"></a>发起 provide</h3><p>每次调用 provide 的时候都需要传入两个参数：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">key</td>
+<td align="left">数据的名称</td>
+</tr>
+<tr>
+<td align="left">value</td>
+<td align="left">数据的值</td>
+</tr>
+</tbody></table>
+<p>还需要注意的是， provide 不是响应式的，如果要使其具备响应性，需要传入响应式数据</p>
+<p>在爷组件 Grandfather.vue 里创建数据 provide 下去：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Grandfather.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, provide, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 声明一个响应性变量并 provide 其自身</span></span><br><span class="line">    <span class="comment">// 孙组件获取后可以保持响应性</span></span><br><span class="line">    <span class="keyword">const</span> msg = <span class="title function_">ref</span>(<span class="string">&#x27;Hello World!&#x27;</span>)</span><br><span class="line">    <span class="title function_">provide</span>(<span class="string">&#x27;msg&#x27;</span>, msg)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 只 provide 响应式变量的值</span></span><br><span class="line">    <span class="comment">// 孙组件获取后只会得到当前的值</span></span><br><span class="line">    <span class="title function_">provide</span>(<span class="string">&#x27;msgValue&#x27;</span>, msg.<span class="property">value</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 声明一个方法并 provide</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">printMsg</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(msg.<span class="property">value</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">provide</span>(<span class="string">&#x27;printMsg&#x27;</span>, printMsg)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="接收-inject"><a href="#接收-inject" class="headerlink" title="接收 inject"></a>接收 inject</h3><blockquote>
+<p><font color=##ffcb5e>有一个特殊情况需要注意，当 Grandson.vue 的父级、爷级组件都 provide 了相同名字的数据下来，那么在 inject 的时候，会优先选择离它更近的组件的数据。</font></p>
+</blockquote>
+<p>每次调用时只需要传入一个参数：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">key</td>
+<td align="left">string</td>
+<td align="left">与 provide 相对应的数据名称</td>
+</tr>
+</tbody></table>
+<p>在孙组件里 inject 爷组件 provide 下来的数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Grandson.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, inject &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">Ref</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 获取响应式变量</span></span><br><span class="line">    <span class="keyword">const</span> msg = inject&lt;<span class="title class_">Ref</span>&lt;<span class="built_in">string</span>&gt;&gt;(<span class="string">&#x27;msg&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msg!.<span class="property">value</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取普通的字符串</span></span><br><span class="line">    <span class="keyword">const</span> msgValue = inject&lt;<span class="built_in">string</span>&gt;(<span class="string">&#x27;msgValue&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msgValue)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取函数</span></span><br><span class="line">    <span class="keyword">const</span> printMsg = inject&lt;<span class="function">() =&gt;</span> <span class="built_in">void</span>&gt;(<span class="string">&#x27;printMsg&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> printMsg === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">      <span class="title function_">printMsg</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在每个 inject 都使用尖括号 <code>&lt;&gt;</code> 添加了相应的 TS 类型，并且在调用变量的时候都进行了判断，这是因为默认的情况下， inject 除了返回指定类型的数据之外，还默认带上 <code>undefined</code> 作为可能的值。</p>
+<p>如果明确数据不会是 <code>undefined</code> ，也可以在后面添加 <code>as</code> 关键字指定其 TS 类型，这样 TypeScript 就不再因为可能出现 <code>undefined</code> 而提示代码有问题。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Grandson.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, inject &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">Ref</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 获取响应式变量</span></span><br><span class="line">    <span class="keyword">const</span> msg = <span class="title function_">inject</span>(<span class="string">&#x27;msg&#x27;</span>) <span class="keyword">as</span> <span class="title class_">Ref</span>&lt;<span class="built_in">string</span>&gt;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msg.<span class="property">value</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取普通的字符串</span></span><br><span class="line">    <span class="keyword">const</span> msgValue = <span class="title function_">inject</span>(<span class="string">&#x27;msgValue&#x27;</span>) <span class="keyword">as</span> <span class="built_in">string</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msgValue)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取函数</span></span><br><span class="line">    <span class="keyword">const</span> printMsg = <span class="title function_">inject</span>(<span class="string">&#x27;printMsg&#x27;</span>) <span class="keyword">as</span> () =&gt; <span class="built_in">void</span></span><br><span class="line">    <span class="title function_">printMsg</span>()</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置默认值"><a href="#设置默认值" class="headerlink" title="设置默认值"></a>设置默认值</h4><p>inject API 还支持设置默认值，可以接受更多的参数。</p>
+<p>默认情况下，只需要传入第二个参数指定默认值即可</p>
+<p>对于不可控的情况，建议在 inject 时添加一个兜底的默认值，防止程序报错：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Grandson.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, inject, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">Ref</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 获取响应式变量</span></span><br><span class="line">    <span class="keyword">const</span> msg = inject&lt;<span class="title class_">Ref</span>&lt;<span class="built_in">string</span>&gt;&gt;(<span class="string">&#x27;msg&#x27;</span>, <span class="title function_">ref</span>(<span class="string">&#x27;Hello&#x27;</span>))</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msg.<span class="property">value</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取普通的字符串</span></span><br><span class="line">    <span class="keyword">const</span> msgValue = inject&lt;<span class="built_in">string</span>&gt;(<span class="string">&#x27;msgValue&#x27;</span>, <span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msgValue)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取函数</span></span><br><span class="line">    <span class="keyword">const</span> printMsg = inject&lt;<span class="function">() =&gt;</span> <span class="built_in">void</span>&gt;(<span class="string">&#x27;printMsg&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="title function_">printMsg</span>()</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="兄弟组件通信"><a href="#兄弟组件通信" class="headerlink" title="兄弟组件通信"></a>兄弟组件通信</h2><p>兄弟组件是指两个组件都挂载在同一个 Father.vue 下，但两个组件之间并没有什么直接的关联，先看看它们的关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Father.vue</span><br><span class="line">├─Brother.vue</span><br><span class="line">└─LittleBrother.vue</span><br></pre></td></tr></table></figure>
+
+<p>这种层级关系下，如果组件之间要进行通信，目前通常有这两类选择：</p>
+<ol>
+<li>【不推荐】先把数据传给 Father.vue ，再使用 父子组件通信方案处理</li>
+<li>【推荐】借助 全局组件通信 的方案达到目的</li>
+</ol>
+<h2 id="全局组件通信"><a href="#全局组件通信" class="headerlink" title="全局组件通信"></a>全局组件通信</h2><p>全局组件通信是指项目下两个任意组件，不管是否有直接关联（例如父子关系、爷孙关系）都可以直接进行交流的通信方案。</p>
+<p>举个例子，像下面这种项目结构， B2.vue 可以采用全局通信方案直接向 D2.vue 发起交流，而无需经过它们各自的父组件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">A.vue</span><br><span class="line">├─B1.vue</span><br><span class="line">├───C1.vue</span><br><span class="line">├─────D1.vue</span><br><span class="line">├─────D2.vue</span><br><span class="line">├───C2.vue</span><br><span class="line">├─────D3.vue</span><br><span class="line">└─B2.vue</span><br></pre></td></tr></table></figure>
+
+<p>常用的方法有：</p>
+<table>
+<thead>
+<tr>
+<th align="left">方案</th>
+<th align="left">发起方</th>
+<th align="left">接收方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">EventBus</td>
+<td align="left">emit</td>
+<td align="left">on</td>
+</tr>
+<tr>
+<td align="left">Reative State</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">Vuex</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">Pinia</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+</tbody></table>
+<h2 id="EventBus"><a href="#EventBus" class="headerlink" title="EventBus"></a>EventBus</h2><p>Vue 3 应用实例不再实现事件触发接口，因此移除了 <code>$on</code> 、 <code>$off</code> 和 <code>$once</code> 这几个事件 API ，无法像 Vue 2 一样利用 Vue 实例创建 EventBus 。可以使用 <a target="_blank" rel="noopener" href="https://github.com/developit/mitt">mitt</a> 或者 <a target="_blank" rel="noopener" href="https://github.com/scottcorgan/tiny-emitter">tiny-emitter</a> 等第三方插件实现 EventBus 。</p>
+<h2 id="Reative-State"><a href="#Reative-State" class="headerlink" title="Reative State"></a>Reative State</h2><p>在 Vue 3 里，使用响应式的 reative API 也可以实现一个小型的状态共享库，如果运用在一个简单的 H5 活动页面这样小需求里，完全可以满足使用。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/state/index.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果有多个不同业务的内部状态共享</span></span><br><span class="line"><span class="comment">// 使用具名导出更容易维护</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="comment">// 设置一个属性并赋予初始值</span></span><br><span class="line">  <span class="attr">message</span>: <span class="string">&#x27;Hello World&#x27;</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加一个更新数据的方法</span></span><br><span class="line">  <span class="title function_">setMessage</span>(<span class="params">msg: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">message</span> = msg</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建状态中心"><a href="#创建状态中心" class="headerlink" title="创建状态中心"></a>创建状态中心</h3><p>首先在 src 目录下创建一个 state 文件夹，并添加一个 index.ts 文件，写入以下代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/state/index.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果有多个不同业务的内部状态共享</span></span><br><span class="line"><span class="comment">// 使用具名导出更容易维护</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="comment">// 设置一个属性并赋予初始值</span></span><br><span class="line">  <span class="attr">message</span>: <span class="string">&#x27;Hello World&#x27;</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加一个更新数据的方法</span></span><br><span class="line">  <span class="title function_">setMessage</span>(<span class="params">msg: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">message</span> = msg</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这就完成了一个简单的 Reactive State 响应式状态中心的创建。</p>
+<h3 id="设定状态更新逻辑"><a href="#设定状态更新逻辑" class="headerlink" title="设定状态更新逻辑"></a>设定状态更新逻辑</h3><p>接下来在一个组件 Child.vue 的 <code>&lt;script /&gt;</code> 里添加以下代码，分别进行了以下操作：</p>
+<ol>
+<li>打印初始值</li>
+<li>对 state 里的数据启用侦听器</li>
+<li>使用 state 里的方法更新数据</li>
+<li>直接更新 state 的数据</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.vue</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineComponent, watch &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; state &#125; <span class="keyword">from</span> <span class="string">&#x27;@/state&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(state.<span class="property">message</span>)</span><br><span class="line">    <span class="comment">// Hello World</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为是响应式数据，所以可以侦听数据变化</span></span><br><span class="line">    <span class="title function_">watch</span>(</span><br><span class="line">      <span class="function">() =&gt;</span> state.<span class="property">message</span>,</span><br><span class="line">      <span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Message 发生变化：&#x27;</span>, val)</span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      state.<span class="title function_">setMessage</span>(<span class="string">&#x27;Hello Hello&#x27;</span>)</span><br><span class="line">      <span class="comment">// Message 发生变化： Hello Hello</span></span><br><span class="line">    &#125;, <span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      state.<span class="property">message</span> = <span class="string">&#x27;Hi Hi&#x27;</span></span><br><span class="line">      <span class="comment">// Message 发生变化： Hi Hi</span></span><br><span class="line">    &#125;, <span class="number">2000</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="观察全局状态变化"><a href="#观察全局状态变化" class="headerlink" title="观察全局状态变化"></a>观察全局状态变化</h3><p>继续在另外一个组件 Father.vue 里写入以下代码，导入 state 并在 <code>&lt;template /&gt;</code> 渲染其中的数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; state.message &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&#x27;@cp/Child.vue&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123; state &#125; <span class="keyword">from</span> <span class="string">&#x27;@/state&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">components</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title class_">Child</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      state,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>可以观察到当 Child.vue 里的定时器执行时， Father.vue 的视图也会同步得到更新。</p>
+<p>一个无需额外插件即可实现的状态中心就这么完成了！</p>
+<hr>
+<hr>
+<h1 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h1><h2 id="响应性数据的传递与接收"><a href="#响应性数据的传递与接收" class="headerlink" title="响应性数据的传递与接收"></a>响应性数据的传递与接收</h2><p>provide 和 inject 本身不可响应，但是并非完全不能够拿到响应的结果，只需要我们传入的数据具备响应性，它依然能够提供响应支持。</p>
+<p>以 <code>ref</code> 和 <code>reactive</code> 为例，来看看应该怎么发起 <code>provide</code> 和接收 <code>inject</code>。</p>
+<p>先在 <code>Grandfather.vue</code> 里 <code>provide</code> 数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  setup () &#123;</span><br><span class="line">    <span class="comment">// provide一个ref</span></span><br><span class="line">    <span class="keyword">const</span> msg = ref&lt;<span class="built_in">string</span>&gt;(<span class="string">&#x27;Hello World!&#x27;</span>);</span><br><span class="line">    <span class="title function_">provide</span>(<span class="string">&#x27;msg&#x27;</span>, msg);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// provide一个reactive</span></span><br><span class="line">    <span class="keyword">const</span> <span class="attr">userInfo</span>: <span class="title class_">Member</span> = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Petter&#x27;</span></span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="title function_">provide</span>(<span class="string">&#x27;userInfo&#x27;</span>, userInfo);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2s 后更新数据</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 修改消息内容</span></span><br><span class="line">      msg.<span class="property">value</span> = <span class="string">&#x27;Hi World!&#x27;</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 修改用户名</span></span><br><span class="line">      userInfo.<span class="property">name</span> = <span class="string">&#x27;Tom&#x27;</span>;</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>Grandsun.vue</code> 里 <code>inject</code> 拿到数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  setup () &#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="keyword">const</span> msg = <span class="title function_">inject</span>(<span class="string">&#x27;msg&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> userInfo = <span class="title function_">inject</span>(<span class="string">&#x27;userInfo&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印刚刚拿到的数据</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msg);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(userInfo);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为 2s 后数据会变，我们 3s 后再看下，可以争取拿到新的数据</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(msg);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(userInfo);</span><br><span class="line">    &#125;, <span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 响应式数据还可以直接给 template 使用，会实时更新</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      msg,</span><br><span class="line">      userInfo</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><font color=#39c5bb>响应式的数据 <code>provide</code> 出去，在子孙组件拿到的也是响应式的，并且可以如同自身定义的响应式变量一样，直接 <code>return</code> 给 <code>template</code> 使用，一旦数据有变化，视图也会立即更新。</font></p>
+<p><font color=#3ba776><u>但上面这句话有效的前提是，不破坏数据的响应性，比如 ref 变量，你需要完整的传入，而不能只传入它的 <code>value</code>，对于 <code>reactive</code> 也是同理，不能直接解构去破坏原本的响应性。</u></font></p>
+<p>:exclamation: 切记！切记！！！</p>
+</blockquote>
+<h2 id="引用类型的传递与接收"><a href="#引用类型的传递与接收" class="headerlink" title="引用类型的传递与接收"></a>引用类型的传递与接收</h2><blockquote>
+<p>这里是针对非响应性数据的处理</p>
+</blockquote>
+<p>provide 和 inject 并不是可响应的，这是官方的故意设计，但是由于引用类型的特殊性，在子孙组件拿到了数据之后，他们的属性还是可以正常的响应变化。</p>
+<p>先在 <code>Father.vue</code> 里 <code>provide</code> 数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span>&gt;</span><span class="tag">&lt;/<span class="name">Child</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  父组件--tags=&#123;&#123;tags&#125;&#125;--userInfo=&#123;&#123;userInfo&#125;&#125;</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123;defineComponent, provide&#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&quot;./Child.vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">interface <span class="title class_">Member</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">id</span>: number,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">name</span>: string,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">components</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title class_">Child</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="comment">// ...</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  setup () &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// provide 一个数组</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">tags</span>: string[] = [ <span class="string">&#x27;中餐&#x27;</span>, <span class="string">&#x27;粤菜&#x27;</span>, <span class="string">&#x27;烧腊&#x27;</span> ];</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">provide</span>(<span class="string">&#x27;tags&#x27;</span>, tags);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// provide 一个对象</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">userInfo</span>: <span class="title class_">Member</span> = &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">id</span>: <span class="number">1</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">name</span>: <span class="string">&#x27;Petter&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">provide</span>(<span class="string">&#x27;userInfo&#x27;</span>, userInfo);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 2s 后更新数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// 增加tags的长度</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags.<span class="title function_">push</span>(<span class="string">&#x27;叉烧&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// 修改userInfo的属性值</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      userInfo.<span class="property">name</span> = <span class="string">&#x27;Tom&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;, <span class="number">2000</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      userInfo,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>Chlid.vue</code> 里 <code>inject</code> 拿到数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> 在浏览器里渲染后的 <span class="variable constant_">HTML</span> <span class="variable constant_">DOM</span> 结构 --&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    子组件--tags=&#123;&#123;tags&#125;&#125;--userInfo=&#123;&#123;userInfo&#125;&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123;defineComponent, inject&#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">interface <span class="title class_">Member</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">id</span>: number,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">name</span>: string,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  setup () &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 获取数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">tags</span>: string[] = <span class="title function_">inject</span>(<span class="string">&#x27;tags&#x27;</span>) || [];</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">userInfo</span>: <span class="title class_">Member</span> = <span class="title function_">inject</span>(<span class="string">&#x27;userInfo&#x27;</span>) || &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">id</span>: <span class="number">0</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">name</span>: <span class="string">&#x27;&#x27;</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 打印刚刚拿到的数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="variable language_">console</span>.<span class="title function_">log</span>(tags);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="variable language_">console</span>.<span class="title function_">log</span>(tags.<span class="property">length</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="variable language_">console</span>.<span class="title function_">log</span>(userInfo);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 因为 2s 后数据会变，我们 3s 后再看下，能够看到已经是更新后的数据了</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">console</span>.<span class="title function_">log</span>(tags);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">console</span>.<span class="title function_">log</span>(tags.<span class="property">length</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">console</span>.<span class="title function_">log</span>(userInfo);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;, <span class="number">3000</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span>&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      userInfo</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.7em39ocpc7k0.webp" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.1fgwu8yzj9eo.webp" alt="image" style="zoom: 67%;" /> <img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.vwi0yofnixs.webp" alt="image" style="zoom: 67%;" /></p>
+<p>引用类型的数据，拿到后可以直接用，属性的值更新后，子孙组件也会被更新。</p>
+<blockquote>
+<p><font color=red>由于不具备真正的响应性，<code>return</code> 给模板使用依然不会更新视图，如果涉及到视图的数据，请依然使用 响应式 API</font></p>
+</blockquote>
+<h2 id="基本类型的传递与接收"><a href="#基本类型的传递与接收" class="headerlink" title="基本类型的传递与接收"></a>基本类型的传递与接收</h2><blockquote>
+<p>这里是针对非响应性数据的处理</p>
+</blockquote>
+<p>基本数据类型被直接 <code>provide</code> 出去后，再怎么修改，都无法更新下去，子孙组件拿到的永远是第一次的那个值。</p>
+<p>先在 <code>Father.vue</code> 里 <code>provide</code> 数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span>&gt;</span><span class="tag">&lt;/<span class="name">Child</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  父组件--tags=&#123;&#123;tags&#125;&#125;--name=&#123;&#123;name&#125;&#125;</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123;defineComponent, provide&#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&quot;./Child.vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">components</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title class_">Child</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="comment">// ...</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  setup () &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// provide 一个数组的长度</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">tags</span>: string[] = [ <span class="string">&#x27;中餐&#x27;</span>, <span class="string">&#x27;粤菜&#x27;</span>, <span class="string">&#x27;烧腊&#x27;</span> ];</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">provide</span>(<span class="string">&#x27;tagsCount&#x27;</span>, tags.<span class="property">length</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// provide 一个字符串</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">let</span> <span class="attr">name</span>: string = <span class="string">&#x27;Petter&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">provide</span>(<span class="string">&#x27;name&#x27;</span>, name);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 2s 后更新数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// tagsCount 在 Grandson 那边依然是 3</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags.<span class="title function_">push</span>(<span class="string">&#x27;叉烧&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// name 在 Grandson 那边依然是 Petter</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      name = <span class="string">&#x27;Tom&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;, <span class="number">2000</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      name,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>Child.vue</code> 里 <code>inject</code> 拿到数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  setup () &#123;</span><br><span class="line">    <span class="comment">// 获取数据</span></span><br><span class="line">    <span class="keyword">const</span> <span class="attr">name</span>: <span class="built_in">string</span> = <span class="title function_">inject</span>(<span class="string">&#x27;name&#x27;</span>) || <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">tagsCount</span>: <span class="built_in">number</span> = <span class="title function_">inject</span>(<span class="string">&#x27;tagsCount&#x27;</span>) || <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印刚刚拿到的数据</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(name);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(tagsCount);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为 2s 后数据会变，我们 3s 后再看下</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依然是 Petter</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(name);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 依然是 3</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(tagsCount);</span><br><span class="line">    &#125;, <span class="number">3000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.5qlea41ipxs0.webp" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.78mngf46p6o0.webp" alt="image" style="zoom: 67%;" /><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.2rvq3qfrfk20.webp" alt="image" style="zoom: 67%;" /></p>
+<p>很失望，并没有变化。</p>
+<blockquote>
+<p>那么是否一定要定义成响应式数据或者引用类型数据呢？</p>
+<p>当然不是，我们在 <code>provide</code> 的时候，也可以稍作修改，让它能够同步更新下去。</p>
+</blockquote>
+<p>依然是先在 <code>father.vue</code> 里 <code>provide</code> 数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="title class_">Father</span>.<span class="property">vue</span> --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">Child</span>&gt;</span><span class="tag">&lt;/<span class="name">Child</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  父组件--tags=&#123;&#123;tags&#125;&#125;--name=&#123;&#123;name&#125;&#125;</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123;defineComponent, provide&#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&quot;./Child.vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">components</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title class_">Child</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="comment">// ...</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  setup () &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// provide 一个数组的长度</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">tags</span>: string[] = [ <span class="string">&#x27;中餐&#x27;</span>, <span class="string">&#x27;粤菜&#x27;</span>, <span class="string">&#x27;烧腊&#x27;</span> ];</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">provide</span>(<span class="string">&#x27;tagsCount&#x27;</span>, (): <span class="function"><span class="params">number</span> =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> tags.<span class="property">length</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// provide 字符串</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">let</span> <span class="attr">name</span>: string = <span class="string">&#x27;Petter&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">provide</span>(<span class="string">&#x27;name&#x27;</span>, (): <span class="function"><span class="params">string</span> =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> name;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 2s 后更新数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// tagsCount 现在可以正常拿到 4 了</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags.<span class="title function_">push</span>(<span class="string">&#x27;叉烧&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// name 现在可以正常拿到 Tom 了</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      name = <span class="string">&#x27;Tom&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;, <span class="number">2000</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tags,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      name,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>再来 <code>child.vue</code> 里修改一下 <code>inject</code> 的方式，看看这次拿到的数据：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!-- <span class="title class_">Child</span>.<span class="property">vue</span> 在浏览器里渲染后的 <span class="variable constant_">HTML</span> <span class="variable constant_">DOM</span> 结构 --&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    子组件--tagsCount=&#123;&#123;tagsCount()&#125;&#125;--name=&#123;&#123;name&#125;&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> &#123;defineComponent, inject&#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  setup () &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 获取数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">tagsCount</span>: any = <span class="title function_">inject</span>(<span class="string">&#x27;tagsCount&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">const</span> <span class="attr">name</span>: any = <span class="title function_">inject</span>(<span class="string">&#x27;name&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 打印刚刚拿到的数据</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">tagsCount</span>());</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">name</span>());</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="comment">// 因为 2s 后数据会变，我们 3s 后再看下</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// 现在可以正确得到 4</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">tagsCount</span>());</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="comment">// 现在可以正确得到 Tom</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">name</span>());</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;, <span class="number">3000</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="keyword">return</span>&#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      tagsCount,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      name,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.h190jfhz08w.webp" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.78t5emxibv40.webp" alt="image" style="zoom:67%;" /><img src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/ref/image.2vjrjve3tey0.webp" alt="image" style="zoom:67%;" /></p>
+<p>这次可以正确拿到数据了，看出这2次的写法有什么区别了吗？</p>
+<blockquote>
+<p><font color=##3ba776>基本数据类型，需要 <code>provide</code> 一个函数，将其 <code>return</code> 出去给子孙组件用，这样子孙组件每次拿到的数据才会是新的。</font></p>
+<p>但由于不具备响应性，所以子孙组件每次都需要重新通过执行 <code>inject</code> 得到的函数才能拿到最新的数据。</p>
+<p><font color=#3ba776>由于不具备真正的响应性，<code>return</code> 给模板使用依然不会更新视图，如果涉及到视图的数据，请依然使用 响应式 API</font></p>
+</blockquote>
+
+            
+        </div>
+        <footer class="article-footer">
+            <a data-url="https://yumubi.github.io/2023/06/03/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Vue3/" data-id="clifb8htv001b24vkfzp41uas" data-title="组件通信"
+               class="article-share-link">分享</a>
+            
+            
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web/" rel="tag">Web</a></li></ul>
+
+        </footer>
+    </div>
+    
+        
+    <nav id="article-nav">
+        
+        
+            <div class="article-nav-link-wrap article-nav-link-right">
+                
+                    <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/illust_76336892_202118_214330.15ygcx3affc0.webp" data-sizes="auto" alt="Vue3基础入门"
+                         class="lazyload">
+                
+                <a href="/2023/05/31/Vue3%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"></a>
+                <div class="article-nav-caption">后一篇</div>
+                <div class="article-nav-title">
+                    
+                        Vue3基础入门
+                    
+                </div>
+            </div>
+        
+    </nav>
+
+    
+</article>
+
+</section>
+                
+                    <aside id="sidebar">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="Goji" class="lazyload">
+            <div class="sidebar-author-name">Goji</div>
+            <div class="sidebar-description">Eat GojiBerries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">10</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">12</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%BF%E5%AD%90/">板子</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag">信息论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 10px;">Vue3</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 10px;">信息论</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="/2023/06/03/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Vue3/">组件通信</a>
+                    </li>
+                
+                    <li>
+                        <a href="/2023/05/31/Vue3%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">Vue3基础入门</a>
+                    </li>
+                
+                    <li>
+                        <a href="/2023/05/23/UML%20%E7%B1%BB%E5%9B%BE%E4%B8%AD%E7%9A%84%E5%85%AD%E7%A7%8D%E5%85%B3%E7%B3%BB/">UML</a>
+                    </li>
+                
+                    <li>
+                        <a href="/2023/05/22/%E5%B9%B6%E6%9F%A5%E9%9B%86/">并查集</a>
+                    </li>
+                
+                    <li>
+                        <a href="/2023/05/22/idea%E5%BF%AB%E6%8D%B7%E9%94%AE/">idea快捷键</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+</aside>
+                
+            </div>
+            <footer id="footer">
+    <div class="footer-line"></div>
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            
+            <div>
+                <span class="icon-copyright"></span>
+                2022-2023
+                <span class="footer-info-sep"></span>
+                Goji
+            </div>
+            
+                <div>
+                    基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+                    Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+                </div>
+            
+            
+                <div>
+                    <span class="icon-brush"></span>
+                    42.3k
+                    &nbsp;|&nbsp;
+                    <span class="icon-coffee"></span>
+                    02:56
+                </div>
+            
+            
+                <div>
+                    <span class="icon-eye"></span>
+                    <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+                    &nbsp;|&nbsp;
+                    <span class="icon-user"></span>
+                    <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+                </div>
+            
+        </div>
+    </div>
+</footer>
+  
+        </div>
+        <nav id="mobile-nav">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="Goji" class="lazyload">
+            <div class="sidebar-author-name">Goji</div>
+            <div class="sidebar-description">Eat GojiBerries</div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">10</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">12</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yumubi itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+</nav>
+        
+<script src="https://unpkg.com/jquery@3.6.3/dist/jquery.min.js"></script>
+
+
+<script src="https://unpkg.com/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/busuanzi@2.3.0/bsz.pure.mini.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+
+
+
+
+    </div>
+    <div class="site-search">
+        <div class="algolia-popup popup">
+            <div class="algolia-search">
+                <span class="algolia-search-input-icon"></span>
+                <div class="algolia-search-input" id="algolia-search-input"></div>
+            </div>
+
+            <div class="algolia-results">
+                <div id="algolia-stats"></div>
+                <div id="algolia-hits"></div>
+                <div id="algolia-pagination" class="algolia-pagination"></div>
+            </div>
+
+            <span class="popup-btn-close"></span>
+        </div>
+    </div>
+    <!-- hexo injector body_end start -->
+<script src="/js/insertHighlight.js"></script>
+<!-- hexo injector body_end end --></body>
+    </html>
+
