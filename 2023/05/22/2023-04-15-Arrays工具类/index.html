@@ -20,7 +20,7 @@
 <meta property="og:description" content="Arrays工具类创建数组 copyOf，复制指定的数组，截取或用 null 填充 copyOfRange，复制指定范围内的数组到一个新的数组 fill，对数组进行填充  123456789101112 String[] intro &#x3D; new String[] &amp;#123;&quot;赵&quot;, &quot;钱&quot;, &quot;孙&quot;, &quot;李&quot;&amp;#12">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-22T02:55:20.384Z">
-<meta property="article:modified_time" content="2023-05-23T05:23:49.600Z">
+<meta property="article:modified_time" content="2023-06-03T01:44:16.956Z">
 <meta property="article:author" content="Goji">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -176,13 +176,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">10</span>];</span><br><span class="line">Arrays.setAll(array, i -&gt; i * <span class="number">10</span>);</span><br><span class="line">System.out.println(Arrays.toString(array));</span><br></pre></td></tr></table></figure>
 
 <p>在Java 8中， 在<strong>RaggedArray.java</strong> 中引入并在 <strong><code>ArrayOfGenerics.java.Array.setAll()</code></strong> 中重用。它使用一个生成器并生成不同的值，可以选择基于数组的索引元素（通过访问当前索引，生成器可以读取数组值并对其进行修改）</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/alex_wsc/java_thinking/1921188">https://www.kancloud.cn/alex_wsc/java_thinking/1921188</a></p>
-</blockquote>
 <h3 id="parallelPrefix"><a href="#parallelPrefix" class="headerlink" title="parallelPrefix"></a>parallelPrefix</h3><p><code>parallelPrefix()</code> 方法和 <code>setAll()</code> 方法一样，也是 Java 8 之后提供的，提供了一个函数式编程的入口，通过遍历数组中的元素，将当前下标位置上的元素与它之前下标的元素进行操作，然后将操作后的结果覆盖当前下标位置上的元素。</p>
 <blockquote>
 <p>没有“prefix()”方法，只有 **parallelPrefix()**。这类似于 <strong>Stream</strong> 类中的 <strong>reduce()</strong> 方法:它对前一个元素和当前元素执行一个操作，并将结果放入当前元素位置:</p>
-<p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/alex_wsc/java_thinking/1921202">https://www.kancloud.cn/alex_wsc/java_thinking/1921202</a></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[] &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">Arrays.parallelPrefix(arr, (left, right) -&gt; left + right);</span><br><span class="line">System.out.println(Arrays.toString(arr));</span><br></pre></td></tr></table></figure>
 
@@ -191,7 +187,7 @@
             
         </div>
         <footer class="article-footer">
-            <a data-url="https://yumubi.github.io/2023/05/22/2023-04-15-Arrays%E5%B7%A5%E5%85%B7%E7%B1%BB/" data-id="clifb8hst000224vk7tcwdije" data-title="Arrays工具类"
+            <a data-url="https://yumubi.github.io/2023/05/22/2023-04-15-Arrays%E5%B7%A5%E5%85%B7%E7%B1%BB/" data-id="clifd547s0002ugvk5tgfah0y" data-title="Arrays工具类"
                class="article-share-link">分享</a>
             
             
@@ -205,16 +201,14 @@
         
             <div class="article-nav-link-wrap article-nav-link-left">
                 
-                    
-                    
-                        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/2ac6797bc2a305266408d7e25a408f481b09e036.1schb1xnpou8.jpg" data-sizes="auto" alt="Git指令" class="lazyload">
-                    
+                    <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/451_4K.2qs54rh58gc0.webp" data-sizes="auto" alt="python"
+                         class="lazyload">
                 
-                <a href="/2023/05/22/2023-04-15-Git%E6%8C%87%E4%BB%A4/"></a>
+                <a href="/2023/05/22/2023-04-15-python%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/"></a>
                 <div class="article-nav-caption">前一篇</div>
                 <div class="article-nav-title">
                     
-                        Git指令
+                        python
                     
                 </div>
             </div>
@@ -224,7 +218,7 @@
                 
                     
                     
-                        <img data-src="/covers/飞书20230507-140716.jpg" data-sizes="auto" alt="信息论" class="lazyload">
+                        <img data-src="https://cdn.staticaly.com/gh/yumubi/picx-images-hosting@master/covers/image.1xq271q17sbk.webp" data-sizes="auto" alt="信息论" class="lazyload">
                     
                 
                 <a href="/2023/03/26/%E4%BF%A1%E6%81%AF%E8%AE%BA/"></a>
@@ -253,7 +247,7 @@
         <div class="sidebar-state">
             <div class="sidebar-state-article">
                 <div>文章</div>
-                <div class="sidebar-state-number">10</div>
+                <div class="sidebar-state-number">9</div>
             </div>
             <div class="sidebar-state-category">
                 <div>分类</div>
@@ -261,7 +255,7 @@
             </div>
             <div class="sidebar-state-tag">
                 <div>标签</div>
-                <div class="sidebar-state-number">12</div>
+                <div class="sidebar-state-number">11</div>
             </div>
         </div>
         <div class="sidebar-social">
@@ -314,7 +308,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag">信息论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue3/" rel="tag">Vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" rel="tag">信息论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
         </div>
     </div>
 
@@ -324,7 +318,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 10px;">Vue3</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 10px;">信息论</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a>
+            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/Vue3/" style="font-size: 10px;">Vue3</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 10px;">信息论</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a>
         </div>
     </div>
 
@@ -393,10 +387,10 @@
             
                 <div>
                     <span class="icon-brush"></span>
-                    42.3k
+                    39.2k
                     &nbsp;|&nbsp;
                     <span class="icon-coffee"></span>
-                    02:56
+                    02:44
                 </div>
             
             
@@ -423,7 +417,7 @@
         <div class="sidebar-state">
             <div class="sidebar-state-article">
                 <div>文章</div>
-                <div class="sidebar-state-number">10</div>
+                <div class="sidebar-state-number">9</div>
             </div>
             <div class="sidebar-state-category">
                 <div>分类</div>
@@ -431,7 +425,7 @@
             </div>
             <div class="sidebar-state-tag">
                 <div>标签</div>
-                <div class="sidebar-state-number">12</div>
+                <div class="sidebar-state-number">11</div>
             </div>
         </div>
         <div class="sidebar-social">
